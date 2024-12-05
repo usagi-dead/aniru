@@ -19,7 +19,6 @@ const AnimeCatalog = () => {
                 const buffer = await response.arrayBuffer();
                 const db = new SQL.Database(new Uint8Array(buffer));
 
-                // Выполняем запрос для получения аниме с жанрами
                 const query = `
                     SELECT a.id, a.title, a.description, a.release_year, a.rating, a.image_url, 
                         GROUP_CONCAT(g.name, ', ') AS genres
@@ -66,13 +65,17 @@ const AnimeCatalog = () => {
             <h1>Каталог Аниме</h1>
             <div className="anime-cards">
                 {animeList.map(anime => (
-                    <div key={anime.id} className="anime-card">
-                        <img src={anime.image_url || '/placeholder.jpg'} alt={anime.title} />
-                        <h2>{anime.title}</h2>
-                        <p>{anime.description}</p>
-                        <p><strong>Год выпуска:</strong> {anime.release_year}</p>
-                        <p><strong>Рейтинг:</strong> {anime.rating?.toFixed(1)}</p>
-                        <p><strong>Жанры:</strong> {anime.genres || 'Не указаны'}</p>
+                    <div className="anime-wrapper">
+                        <img src={anime.image_url || '/placeholder.jpg'} alt={anime.title} className="anime-blurred"/>
+
+                        <div key={anime.id} className="anime-card">
+                            <img src={anime.image_url || '/placeholder.jpg'} alt={anime.title}/>
+                            <h2>{anime.title}</h2>
+                            <p>{anime.description}</p>
+                            <p><strong>Год выпуска:</strong> {anime.release_year}</p>
+                            <p><strong>Рейтинг:</strong> {anime.rating?.toFixed(1)}</p>
+                            <p><strong>Жанры:</strong> {anime.genres || 'Не указаны'}</p>
+                        </div>
                     </div>
                 ))}
             </div>
