@@ -3,7 +3,7 @@
   border-radius: 32px;
   width: 270px;
   height: 420px;
-  transition: scale 0.3s;
+  transition: scale 0.3s, transform 0.3s;
 }
 .anime-wrapper .anime-poster, .anime-wrapper .anime-blurred {
   position: absolute;
@@ -81,6 +81,7 @@
 .anime-wrapper:hover {
   scale: 1.05;
   z-index: 2;
+  transform: translateY(-10px);
 }
 .anime-wrapper:hover .anime-blurred {
   opacity: 0;

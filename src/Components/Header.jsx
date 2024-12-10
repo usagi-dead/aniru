@@ -13,7 +13,7 @@ const AnimeCatalog = () => {
                 </form>
             </search>
 
-            <button className="standard-input log-in">Войти</button>
+            <button className="standard-input button">Войти</button>
         </header>
     );
 };
