@@ -1,14 +1,3 @@
-.anime-catalog {
-  padding: 100px 200px;
-}
-
-.anime-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 32px;
-  width: 100%;
-}
-
 .anime-wrapper {
   position: relative;
   border-radius: 32px;
@@ -104,4 +93,4 @@
   transform: translateY(0);
 }
 
-/*# sourceMappingURL=AnimeCatalog.css.map */
+/*# sourceMappingURL=Card.css.map */
