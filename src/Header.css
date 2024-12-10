@@ -1,7 +1,65 @@
+body {
+  background: #1E1E1E;
+  font-family: "Montserrat", serif;
+  color: #fff;
+  padding: 0;
+  margin: 0;
+}
+
 header {
   display: flex;
   justify-content: space-between;
-  padding: 0 200px;
+  align-items: center;
+  padding: 16px 200px;
+  position: fixed;
+  width: calc(100% - 400px);
+  background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
+  backdrop-filter: blur(20px);
+  z-index: 10;
+}
+header .logo {
+  width: 120px;
+  cursor: pointer;
+}
+header input[type=search] {
+  width: 512px;
+}
+header input[type=search]::placeholder {
+  color: rgb(122, 122, 122);
+}
+header .log-in {
+  width: 128px;
+}
+header .standard-input {
+  background-color: rgba(238, 238, 238, 0.15);
+  outline: none;
+  border: none;
+  height: 48px;
+  border-radius: 48px;
+  color: #fff;
+  padding: 0 8px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Montserrat", serif;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+header .standard-input:hover {
+  background-color: rgb(238, 238, 238);
+  color: black;
+}
+header search {
+  position: relative;
+}
+header search .search-icon {
+  position: absolute;
+  left: 40%;
+  top: 24px;
+  transform: translateY(-50%);
+}
+header input[type=search]:not(:placeholder-shown) + .search-icon {
+  opacity: 0;
 }
 
 /*# sourceMappingURL=Header.css.map */

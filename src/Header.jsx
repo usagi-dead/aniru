@@ -4,9 +4,16 @@ import "./Header.css";
 const AnimeCatalog = () => {
     return (
         <header>
-            <h2>aniru</h2>
-            <input type="text"/>
-            <button>Войти</button>
+            <img src="/aniru.svg" alt="aniru" className="logo" />
+
+            <search>
+                <form action="./search/">
+                    <input type="search" id="anime" name="q" placeholder="Поиск" className="standard-input"/>
+                    <img src="/search.svg" alt="🔍" className="search-icon"/>
+                </form>
+            </search>
+
+            <button className="standard-input log-in">Войти</button>
         </header>
     );
 };

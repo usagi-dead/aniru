@@ -1,11 +1,12 @@
 .anime-catalog {
-  padding: 60px 200px;
+  padding: 100px 200px;
 }
 
 .anime-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 32px;
+  width: 100%;
 }
 
 .anime-wrapper {
