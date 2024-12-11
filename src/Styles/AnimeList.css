@@ -1,12 +1,18 @@
 .anime-catalog {
-  padding: 100px 200px;
+  padding: 64px 200px;
 }
 
 .anime-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
   width: 100%;
+}
+
+.anime-list-title {
+  font-size: 64px;
+  margin: 32px 0;
 }
 
 /*# sourceMappingURL=AnimeList.css.map */
