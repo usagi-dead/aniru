@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../Styles/AnimeList.css'
-import { loadAnimeData } from '../database'
+import { loadAnimeData } from '../Database/loadAnimeData.js'
 import AnimeCard from './AnimeCard.jsx'
 
 export default function AnimeList() {
