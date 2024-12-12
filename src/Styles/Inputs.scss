@@ -1,0 +1,27 @@
+@import 'Variables';
+
+.button {
+    padding: 8px 32px;
+}
+
+.standard-input {
+    background-color: rgba(238, 238, 238, 0.15);
+    outline: none;
+    border: none;
+    height: 48px;
+    border-radius: 48px;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: $font-stack;
+    transition:
+        background-color 0.3s,
+        color 0.3s;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: rgba(238, 238, 238, 1);
+    color: black;
+}

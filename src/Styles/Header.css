@@ -1,3 +1,27 @@
+.button {
+  padding: 8px 32px;
+}
+
+.standard-input {
+  background-color: rgba(238, 238, 238, 0.15);
+  outline: none;
+  border: none;
+  height: 48px;
+  border-radius: 48px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Montserrat", serif;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: rgb(238, 238, 238);
+  color: black;
+}
+
 header {
   padding: 16px 0;
   position: fixed;
@@ -24,27 +48,6 @@ header input[type=search] {
 }
 header input[type=search]::placeholder {
   color: rgb(122, 122, 122);
-}
-header .button {
-  padding: 8px 32px;
-}
-header .standard-input {
-  background-color: rgba(238, 238, 238, 0.15);
-  outline: none;
-  border: none;
-  height: 48px;
-  border-radius: 48px;
-  color: #fff;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Montserrat", serif;
-  transition: background-color 0.3s, color 0.3s;
-  cursor: pointer;
-}
-header .button:hover {
-  background-color: rgb(238, 238, 238);
-  color: black;
 }
 header search:hover input[type=search] {
   background-color: rgba(96, 96, 96, 0.8);

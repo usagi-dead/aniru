@@ -22,29 +22,4 @@
   color: black;
 }
 
-.anime-catalog {
-  width: 1400px;
-  max-width: 96%;
-  margin: 60px auto;
-}
-
-.anime-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: center;
-  width: 100%;
-}
-
-.anime-list-title {
-  font-size: 52px;
-  margin: 32px 0;
-}
-
-.anime-top-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/*# sourceMappingURL=AnimeList.css.map */
+/*# sourceMappingURL=Inputs.css.map */
