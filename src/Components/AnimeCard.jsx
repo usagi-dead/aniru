@@ -1,5 +1,6 @@
 import React from 'react'
 import '../Styles/AnimeCard.css'
+import AnimeRating from './AnimeRating.jsx'
 
 export default function AnimeCard(anime) {
     anime = anime.anime
@@ -20,21 +21,7 @@ export default function AnimeCard(anime) {
                 />
 
                 <div className="anime-content-container">
-                    {/*<h2>{anime.title}</h2>*/}
-                    {/*<p>{anime.description}</p>*/}
-
-                    <div
-                        className={`anime-rating ${anime.rating >= 9 ? 'green' : 'yellow'}`}
-                    >
-                        <img
-                            src="/star.svg"
-                            alt="star"
-                            className="anime-star"
-                        />
-                        <span className="anime-rating-text">
-                            {anime.rating?.toFixed(1)}
-                        </span>
-                    </div>
+                    <AnimeRating rating={anime.rating} />
 
                     <div className="anime-text">
                         <p>

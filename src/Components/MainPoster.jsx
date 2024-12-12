@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../Styles/MainPoster.css'
-import { loadAnimeData } from '../Database/loadAnimeData.js'
+import { getAnimeById } from '../Database/getAnimeById.js'
+import AnimeRating from './AnimeRating.jsx'
 
 export default function MainPoster() {
     const [loading, setLoading] = useState(true)
@@ -10,10 +11,7 @@ export default function MainPoster() {
         const fetchMainAnime = async () => {
             setLoading(true)
             try {
-                const animeList = await loadAnimeData()
-                if (animeList.length > 0) {
-                    setMainAnime(animeList[10])
-                }
+                setMainAnime(await getAnimeById(11))
             } catch (error) {
                 console.error('Ошибка при загрузке данных:', error)
             } finally {
@@ -32,11 +30,14 @@ export default function MainPoster() {
         <>
             <div className="main-anime-container">
                 <div className="image-container">
+                    <AnimeRating rating={mainAnime.rating} />
+
                     <img
                         src={'/posters/' + mainAnime.image_url + '.jpg'}
                         alt="main-poster"
                         className="main-anime blurred"
                     />
+
                     <img
                         src={'/posters/' + mainAnime.image_url + '.jpg'}
                         alt="main-poster"
