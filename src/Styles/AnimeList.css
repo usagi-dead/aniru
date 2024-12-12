@@ -1,12 +1,14 @@
 .anime-catalog {
-  padding: 64px 200px;
+  width: 1400px;
+  max-width: 96%;
+  margin: 60px auto;
 }
 
 .anime-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  justify-content: space-between;
+  gap: 32px;
+  justify-content: center;
   width: 100%;
 }
 

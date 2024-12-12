@@ -1,9 +1,11 @@
 .anime-wrapper {
   position: relative;
   border-radius: 32px;
-  width: 270px;
+  min-width: 240px;
+  max-width: 340px;
   height: 420px;
   transition: scale 0.3s, transform 0.3s;
+  flex: 1;
 }
 .anime-wrapper .anime-poster,
 .anime-wrapper .anime-blurred {
@@ -96,4 +98,4 @@
   transform: translateY(0);
 }
 
-/*# sourceMappingURL=Card.css.map */
+/*# sourceMappingURL=AnimeCard.css.map */
