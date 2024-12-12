@@ -47,4 +47,19 @@
   justify-content: space-between;
 }
 
+.filters-icon {
+  height: 20px;
+  transition: filter 0.3s;
+}
+
+.filter-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-button:hover .filters-icon {
+  filter: invert(1);
+}
+
 /*# sourceMappingURL=AnimeList.css.map */

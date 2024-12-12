@@ -31,7 +31,10 @@ export default function AnimeList() {
         <div className="anime-catalog">
             <div className="anime-top-container">
                 <h1 className="anime-list-title">Каталог Аниме</h1>
-                <button className="standard-input button">Фильтры</button>
+                <button className="standard-input button filter-button">
+                    Фильтры
+                    <img src="/filters.svg" alt="?" className="filters-icon" />
+                </button>
             </div>
             <div className="anime-cards">
                 {animeList.map((anime) => (
