@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import '../Styles/MainPoster.css'
 import { getAnimeById } from '../Database/getAnimeById.js'
-import AnimeRating from './AnimeRating.jsx'
 
 export default function MainPoster() {
     const [loading, setLoading] = useState(true)
     const [mainAnime, setMainAnime] = useState(null)
+    const [imageLoaded, setImageLoaded] = useState(false)
 
     useEffect(() => {
         const fetchMainAnime = async () => {
@@ -26,33 +26,38 @@ export default function MainPoster() {
         return <div>Загрузка...</div>
     }
 
+    const handleImageLoad = () => {
+        setTimeout(() => {
+            setImageLoaded(true)
+        }, 200)
+    }
+
     return (
-        <>
-            <div className="main-anime-container">
-                <div className="image-container">
-                    <AnimeRating rating={mainAnime.rating} />
+        <div
+            className={`main-anime-container container ${imageLoaded ? 'loaded' : ''}`}
+        >
+            <div className="image-container">
+                <img
+                    src={'/posters/' + mainAnime.image_url + '.jpg'}
+                    alt=""
+                    className="main-anime blurred"
+                    onLoad={handleImageLoad}
+                />
 
-                    <img
-                        src={'/posters/' + mainAnime.image_url + '.jpg'}
-                        alt="main-poster"
-                        className="main-anime blurred"
-                    />
-
-                    <img
-                        src={'/posters/' + mainAnime.image_url + '.jpg'}
-                        alt="main-poster"
-                        className="main-anime"
-                    />
-                </div>
-
-                <div className="content-container">
-                    <img
-                        src={'/logos/' + mainAnime.image_url + '.png'}
-                        alt="main-anime-logo"
-                        className="main-anime-logo"
-                    />
-                </div>
+                <img
+                    src={'/posters/' + mainAnime.image_url + '.jpg'}
+                    alt=""
+                    className="main-anime"
+                />
             </div>
-        </>
+
+            <div className="content-container">
+                <img
+                    src={'/logos/' + mainAnime.image_url + '.png'}
+                    alt="main-anime-logo"
+                    className="main-anime-logo"
+                />
+            </div>
+        </div>
     )
 }

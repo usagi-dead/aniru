@@ -2,21 +2,19 @@ import React from 'react'
 import '../Styles/AnimeCard.css'
 import AnimeRating from './AnimeRating.jsx'
 
-export default function AnimeCard(anime) {
-    anime = anime.anime
-
+export default function AnimeCard({ anime }) {
     return (
         <div className="anime-wrapper">
             <img
                 src={'/posters/' + anime.image_url + '.jpg'}
-                alt={anime.title}
+                alt=""
                 className="anime-blurred"
             />
 
             <div key={anime.id} className="anime-card">
                 <img
                     src={'/posters/' + anime.image_url + '.jpg'}
-                    alt={anime.title}
+                    alt=""
                     className="anime-poster"
                 />
 
@@ -35,7 +33,7 @@ export default function AnimeCard(anime) {
 
                     <img
                         src={'/logos/' + anime.image_url + '.png'}
-                        alt={anime.title}
+                        alt=""
                         className="anime-logo"
                     />
                 </div>

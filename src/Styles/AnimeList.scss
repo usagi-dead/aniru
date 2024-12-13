@@ -1,9 +1,11 @@
-@import './Inputs';
-
 .anime-catalog {
-    width: 1400px;
-    max-width: 96%;
-    margin: 60px auto;
+    margin: 32px auto;
+    opacity: 0;
+    transition: opacity .3s;
+}
+
+.anime-catalog.loaded {
+    opacity: 1;
 }
 
 .anime-cards {

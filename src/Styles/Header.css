@@ -1,45 +1,26 @@
-.button {
-  padding: 8px 32px;
-}
-
-.standard-input {
-  background-color: rgba(238, 238, 238, 0.15);
-  outline: none;
-  border: none;
-  height: 48px;
-  border-radius: 48px;
-  color: #fff;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Montserrat", serif;
-  transition: background-color 0.3s, color 0.3s;
-  cursor: pointer;
-}
-
-.button:hover {
-  background-color: rgb(238, 238, 238);
-  color: black;
-}
-
-header {
+header .header-back {
   padding: 16px 0;
   position: fixed;
   width: 100%;
   background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
   backdrop-filter: blur(20px);
   z-index: 10;
+  outline: rgba(0, 0, 0, 0) solid 2px;
+  transition: box-shadow 0.3s, outline 0.3s;
 }
 header .header-align {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1400px;
-  max-width: 96%;
+  max-width: calc(100% - 16px);
   margin: 0 auto;
 }
+header .scrolled {
+  outline: rgba(238, 238, 238, 0.15) solid 2px;
+  box-shadow: 0 0 48px rgba(0, 0, 0, 0.3);
+}
 header .logo {
-  width: 120px;
+  width: 100px;
   cursor: pointer;
 }
 header input[type=search] {

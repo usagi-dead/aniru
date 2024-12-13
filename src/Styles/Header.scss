@@ -1,25 +1,32 @@
 @import 'Variables';
-@import './Inputs';
 
 header {
-    padding: 16px 0;
-    position: fixed;
-    width: 100%;
-    background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
-    backdrop-filter: blur(20px);
-    z-index: 10;
+    .header-back {
+        padding: 16px 0;
+        position: fixed;
+        width: 100%;
+        background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
+        backdrop-filter: blur(20px);
+        z-index: 10;
+        outline: rgba(0, 0, 0, 0) solid 2px;
+        transition: box-shadow .3s, outline .3s;
+    }
 
     .header-align {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 1400px;
-        max-width: 96%;
+        max-width: calc(100% - 16px);
         margin: 0 auto;
     }
 
+    .scrolled {
+        outline: rgba(238, 238, 238, 0.15) solid 2px;
+        box-shadow: 0 0 48px rgba(0, 0, 0, 0.3);
+    }
+
     .logo {
-        width: 120px;
+        width: 100px;
         cursor: pointer;
     }
 

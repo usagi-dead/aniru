@@ -1,10 +1,18 @@
+.main-anime-container.loaded {
+  opacity: 1;
+  transform: translateY(0);
+  scale: 1;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, scale 0.3s ease-in-out;
+}
+
 .main-anime-container {
-  height: 700px;
-  width: 1400px;
-  max-width: 96%;
+  height: 730px;
   margin: 0 auto;
   padding-top: 140px;
   position: relative;
+  opacity: 0;
+  scale: 1.2;
+  transform: translateY(-100px);
 }
 .main-anime-container .image-container {
   position: relative;
