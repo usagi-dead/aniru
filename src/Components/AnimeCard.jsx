@@ -1,17 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import '../Styles/AnimeCard.css'
 import AnimeRating from './AnimeRating.jsx'
 
 export default function AnimeCard({ anime }) {
+    const [fasterTransition, setFasterTransition] = useState(false)
+    const { ref, inView } = useInView({
+        threshold: 0.1,
+        triggerOnce: true,
+    })
+
+    if (inView) {
+        setTimeout(() => {
+            setFasterTransition(true)
+        }, 900)
+    }
+
     return (
-        <div className="anime-wrapper">
+        <div
+            className={`anime-wrapper 
+                ${inView ? 'visible' : ''} 
+                ${fasterTransition ? 'faster' : ''}`}
+            ref={ref}
+        >
             <img
                 src={'/posters/' + anime.image_url + '.jpg'}
                 alt=""
                 className="anime-blurred"
             />
 
-            <div key={anime.id} className="anime-card">
+            <div
+                key={anime.id}
+                className={`anime-card ${inView ? 'visible' : ''}`}
+            >
                 <img
                     src={'/posters/' + anime.image_url + '.jpg'}
                     alt=""

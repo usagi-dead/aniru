@@ -2,7 +2,7 @@
   opacity: 1;
   transform: translateY(0);
   scale: 1;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, scale 0.3s ease-in-out;
+  transition: opacity 0.9s ease-in-out, transform 0.9s ease-in-out, scale 0.9s ease-in-out;
 }
 
 .main-anime-container {
