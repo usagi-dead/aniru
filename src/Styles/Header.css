@@ -4,7 +4,7 @@ header .header-back {
   width: 100%;
   background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
   backdrop-filter: blur(20px);
-  z-index: 10;
+  z-index: 20;
   outline: rgba(0, 0, 0, 0) solid 2px;
   transition: box-shadow 0.3s, outline 0.3s;
 }

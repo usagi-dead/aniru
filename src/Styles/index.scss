@@ -36,5 +36,20 @@ body {
 
 .container {
     width: 1400px;
-    max-width: calc(100% - 16px);
+    max-width: calc(100% - 64px);
+}
+
+.button-icon {
+    width: 20px;
+    transition: filter .3s;
+}
+
+.image-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.image-button:hover .button-icon {
+    filter: invert(1);
 }

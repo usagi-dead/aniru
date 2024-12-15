@@ -3,43 +3,71 @@
   opacity: 0;
   transition: opacity 0.3s;
 }
-
-.anime-catalog.loaded {
-  opacity: 1;
-}
-
-.anime-cards {
+.anime-catalog .anime-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 32px;
   justify-content: center;
   width: 100%;
 }
-
-.anime-list-title {
+.anime-catalog .anime-list-title {
   font-size: 52px;
+  font-weight: 1000;
   margin: 32px 0;
 }
-
-.anime-top-container {
+.anime-catalog .anime-top-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.filters-icon {
-  height: 20px;
-  transition: filter 0.3s;
-}
-
-.filter-button {
+.anime-catalog .buttons-container {
   display: flex;
-  align-items: center;
-  gap: 6px;
+  gap: 32px;
+}
+.anime-catalog .sort-container {
+  position: relative;
+}
+.anime-catalog .sort-button {
+  position: relative;
+  width: 210px;
+  z-index: 13;
+  justify-content: center;
+}
+.anime-catalog .sort-menu {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  width: calc(100% - 48px);
+  background: rgba(30, 30, 30, 0.8);
+  backdrop-filter: blur(20px);
+  outline: rgba(238, 238, 238, 0.15) solid 2px;
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 10;
+  animation: fadeInTransform 0.3s;
+}
+.anime-catalog .sort-menu .sort-item {
+  height: 40px;
+  padding: 0;
 }
 
-.filter-button:hover .filters-icon {
-  filter: invert(1);
+.anime-catalog.loaded {
+  opacity: 1;
+}
+
+@keyframes fadeInTransform {
+  from {
+    opacity: 0;
+    transform: translateY(-128px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /*# sourceMappingURL=AnimeList.css.map */
