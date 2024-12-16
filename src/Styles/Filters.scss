@@ -35,17 +35,71 @@
         flex-direction: column;
         justify-content: space-between;
         gap: 16px;
+        position: relative;
     }
 
     .filter-genres {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        flex-wrap: wrap;
+        max-height: 200px;
+        overflow: auto;
+        gap: 12px;
     }
 
+    .filter-range,
     .filters-actions {
         display: flex;
         gap: 16px;
+    }
+
+    .filters-actions {
+        position: absolute;
+        bottom: 32px;
+        right: 32px;
+    }
+
+    input[type='checkbox'] {
+        display: none;
+    }
+
+    .filters-checkbox {
+        background-color: rgba(238, 238, 238, 0.15);
+        height: 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 24px;
+        border-radius: 24px;
+        cursor: pointer;
+        user-select: none;
+        font-weight: 600;
+        transition:
+            background-color 0.3s,
+            color 0.3s;
+    }
+
+    .filters-checkbox:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    input[type='checkbox']:checked + .filters-checkbox {
+        background-color: white;
+        color: black;
+    }
+
+    .filter-title {
+        font-size: 32px;
+        font-weight: 900;
+        margin: 0 0 16px 0;
+    }
+
+    .filter-input {
+        padding: 0 16px;
+        width: 100px;
+    }
+
+    .filter-input:hover {
+        background-color: rgba(255, 255, 255, 0.3);
     }
 }
 

@@ -41,15 +41,35 @@ body {
 
 .button-icon {
     width: 20px;
-    transition: filter .3s;
+    transition: filter 0.3s;
 }
 
 .image-button {
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 8px;
 }
 
+.image-button.active {
+    background-color: rgba(238, 238, 238, 1);
+    color: black;
+
+    .button-icon {
+        filter: invert(1);
+    }
+}
+
 .image-button:hover .button-icon {
     filter: invert(1);
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
 }

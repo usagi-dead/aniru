@@ -1,4 +1,5 @@
 import { initializeDatabase } from './database'
+import { compileToArray } from './compileToArray'
 
 export const loadAnimeData = async () => {
     const db = await initializeDatabase()
@@ -13,18 +14,5 @@ export const loadAnimeData = async () => {
     `
 
     const result = db.exec(query)
-
-    if (result.length > 0) {
-        const columns = result[0].columns
-        const values = result[0].values
-        return values.map((row) => {
-            const anime = {}
-            columns.forEach((col, index) => {
-                anime[col] = row[index]
-            })
-            return anime
-        })
-    } else {
-        return []
-    }
+    return compileToArray(result)
 }

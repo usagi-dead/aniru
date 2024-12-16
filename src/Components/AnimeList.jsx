@@ -5,7 +5,7 @@ import AnimeCard from './AnimeCard.jsx'
 import Filters from './Filters.jsx'
 
 export default function AnimeList() {
-    const [filters, setFilters] = useState(false)
+    const filters = null
     const [sortMenuVisible, setSortMenuVisible] = useState(false)
     const [animeList, setAnimeList] = useState([])
     const [originalAnimeList, setOriginalAnimeList] = useState([])
@@ -13,6 +13,14 @@ export default function AnimeList() {
     const [imagesLoad, setImagesLoad] = useState(false)
     const [sortType, setSortType] = useState(null)
     const [sortButtonText, setSortButtonText] = useState('Сортировать')
+    const [key, setKey] = useState(0)
+    const [activeButton, setActiveButton] = useState(null)
+    const [filtersVisible, setFiltersVisible] = useState(false)
+    const [currentFilters, setCurrentFilters] = useState({
+        selectedGenres: [],
+        yearRange: [],
+        rating: '',
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,36 +39,101 @@ export default function AnimeList() {
         fetchData()
     }, [])
 
+    const handleFiltersApply = (filters) => {
+        setCurrentFilters(filters)
+
+        const filteredList = originalAnimeList.filter((anime) => {
+            const matchesGenres =
+                filters.selectedGenres.length === 0 ||
+                filters.selectedGenres.every((genre) =>
+                    anime.genres.includes(genre)
+                )
+
+            const matchesYear =
+                (!filters.yearRange[0] ||
+                    anime.release_year >= filters.yearRange[0]) &&
+                (!filters.yearRange[1] ||
+                    anime.release_year <= filters.yearRange[1])
+
+            const matchesRating =
+                !filters.rating || anime.rating >= filters.rating
+
+            return matchesGenres && matchesYear && matchesRating
+        })
+
+        setAnimeList(filteredList)
+        setKey((prevKey) => prevKey + 1)
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            try {
+                const data = await loadAnimeData()
+                setAnimeList(data)
+                setOriginalAnimeList(data)
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchData()
+    }, [])
+
+    const handleClick = (id) => {
+        setActiveButton(id)
+        sortAnimeList(sortType, id)
+    }
+
     const toggleSortMenu = () => setSortMenuVisible(!sortMenuVisible)
 
-    const sortAnimeList = (type) => {
+    const sortAnimeList = (type, direction = activeButton || 'descending') => {
         const sortedList = [...animeList]
+
         switch (type) {
             case 'name':
-                sortedList.sort((a, b) => a.title.localeCompare(b.title))
+                sortedList.sort((a, b) =>
+                    direction === 'ascending'
+                        ? a.title.localeCompare(b.title)
+                        : b.title.localeCompare(a.title)
+                )
                 setSortButtonText('По имени')
                 break
             case 'rating':
-                sortedList.sort((a, b) => b.rating - a.rating)
+                sortedList.sort((a, b) =>
+                    direction === 'ascending'
+                        ? a.rating - b.rating
+                        : b.rating - a.rating
+                )
                 setSortButtonText('По рейтингу')
                 break
             case 'year':
-                sortedList.sort((a, b) => b.release_year - a.release_year)
+                sortedList.sort((a, b) =>
+                    direction === 'ascending'
+                        ? a.release_year - b.release_year
+                        : b.release_year - a.release_year
+                )
                 setSortButtonText('По году')
                 break
             default:
                 return
         }
+
         setAnimeList(sortedList)
         setSortType(type)
-        setSortMenuVisible(false)
+        setActiveButton(direction)
+        setKey((prevKey) => prevKey + 1)
     }
 
     const resetSort = () => {
         setAnimeList(originalAnimeList)
         setSortButtonText('Сортировать')
         setSortType(null)
+        setKey((prevKey) => prevKey + 1)
         setSortMenuVisible(false)
+        setActiveButton(null)
     }
 
     useEffect(() => {
@@ -86,9 +159,15 @@ export default function AnimeList() {
 
     return (
         <>
-            {filters && (
-                <Filters check={filters} onClose={() => setFilters(false)} />
+            {filtersVisible && (
+                <Filters
+                    check={filtersVisible}
+                    onClose={() => setFiltersVisible(false)}
+                    applyFilters={handleFiltersApply}
+                    initialFilters={currentFilters}
+                />
             )}
+
             <div
                 className={`container anime-catalog ${imagesLoad ? 'loaded' : ''}`}
             >
@@ -134,13 +213,34 @@ export default function AnimeList() {
                                     >
                                         Сбросить
                                     </button>
+                                    <div className="sort-direction">
+                                        {['ascending', 'descending'].map(
+                                            (label) => (
+                                                <button
+                                                    key={label}
+                                                    onClick={() =>
+                                                        handleClick(label)
+                                                    }
+                                                    className={`standard-input button image-button sort-item direction-button + ${activeButton === label ? 'active' : ''}`}
+                                                >
+                                                    <img
+                                                        src={
+                                                            '/' + label + '.svg'
+                                                        }
+                                                        className="button-icon direction-image"
+                                                        alt=""
+                                                    />
+                                                </button>
+                                            )
+                                        )}
+                                    </div>
                                 </div>
                             )}
                         </div>
 
                         <button
                             className="standard-input button image-button"
-                            onClick={() => setFilters(!filters)}
+                            onClick={() => setFiltersVisible(!filters)}
                         >
                             Фильтры
                             <img
@@ -153,7 +253,7 @@ export default function AnimeList() {
                 </div>
                 <div className="anime-cards">
                     {animeList.map((anime) => (
-                        <AnimeCard key={anime.id} anime={anime} />
+                        <AnimeCard key={`${anime.id}-${key}`} anime={anime} />
                     ))}
                 </div>
             </div>

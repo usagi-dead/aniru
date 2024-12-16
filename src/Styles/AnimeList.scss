@@ -59,8 +59,23 @@
         animation: fadeInTransform 0.3s;
 
         .sort-item {
-            height: 40px;
+            min-height: 40px;
             padding: 0;
+            flex: 1;
+        }
+
+        .sort-direction {
+            width: 100%;
+            display: flex;
+            gap: 16px;
+
+            .direction-button {
+                max-height: 40px;
+
+                .direction-image {
+                    height: 16px;
+                }
+            }
         }
     }
 }
@@ -72,7 +87,7 @@
 @keyframes fadeInTransform {
     from {
         opacity: 0;
-        transform: translateY(-128px);
+        transform: translateY(-64px);
     }
     to {
         opacity: 1;

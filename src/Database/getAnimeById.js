@@ -25,6 +25,6 @@ export const getAnimeById = async (id) => {
         })
         return anime
     } else {
-        return null
+        return []
     }
 }

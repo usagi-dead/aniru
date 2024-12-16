@@ -1,15 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import '../Styles/Filters.css'
+import { getFilters } from '../Database/getFilters.js'
 
-export default function Filters({ onClose, applyFilters }) {
+export default function Filters({
+    onClose,
+    applyFilters,
+    check,
+    initialFilters,
+}) {
     const [genres, setGenres] = useState([])
-    const [selectedGenres, setSelectedGenres] = useState([])
-    const [yearRange, setYearRange] = useState([2000, 2024])
-    const [rating, setRating] = useState(0)
+    const [selectedGenres, setSelectedGenres] = useState(
+        initialFilters.selectedGenres || []
+    )
+    const [yearRange, setYearRange] = useState(initialFilters.yearRange)
+    const [rating, setRating] = useState(initialFilters.rating)
+
+    const handleKeyDown = (e) => {
+        const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete']
+        if (!/[0-9]/.test(e.key) && !allowedKeys.includes(e.key)) {
+            e.preventDefault()
+        }
+    }
 
     useEffect(() => {
-        setGenres(['Экшен', 'Приключения', 'Драма', 'Фэнтези', 'Комедия']) // Заглушка
+        const fetchFilters = async () => {
+            try {
+                const data = await getFilters()
+                data.sort()
+                setGenres(data)
+            } catch (error) {
+                console.error('Ошибка при загрузке фильтров:', error)
+            }
+        }
+
+        fetchFilters()
     }, [])
+
+    useEffect(() => {
+        if (check) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'auto'
+        }
+
+        return () => {
+            document.body.style.overflow = 'auto'
+        }
+    }, [check])
 
     const handleGenreChange = (genre) => {
         if (selectedGenres.includes(genre)) {
@@ -26,8 +63,8 @@ export default function Filters({ onClose, applyFilters }) {
 
     const handleResetFilters = () => {
         setSelectedGenres([])
-        setYearRange([2000, 2024])
-        setRating(0)
+        setYearRange([])
+        setRating('')
     }
 
     return (
@@ -43,9 +80,10 @@ export default function Filters({ onClose, applyFilters }) {
                         <img src="/close.svg" alt="x" />
                     </button>
                 </div>
+
                 <div className="filters-content-container">
                     <div className="filter-group">
-                        <h3>Жанры</h3>
+                        <h3 className="filter-title">Жанры</h3>
                         <div className="filter-genres">
                             {genres.map((genre) => (
                                 <label key={genre}>
@@ -57,20 +95,23 @@ export default function Filters({ onClose, applyFilters }) {
                                             handleGenreChange(genre)
                                         }
                                     />
-                                    {genre}
+                                    <span className="filters-checkbox">
+                                        {genre}
+                                    </span>
                                 </label>
                             ))}
                         </div>
                     </div>
 
                     <div className="filter-group">
-                        <h3>Год выпуска</h3>
+                        <h3 className="filter-title">Год выпуска</h3>
                         <div className="filter-range">
                             <input
+                                className="standard-input filter-input"
                                 type="number"
-                                min="1900"
-                                max="2024"
-                                value={yearRange[0]}
+                                placeholder="от"
+                                value={yearRange[0] || ''}
+                                onKeyDown={handleKeyDown}
                                 onChange={(e) =>
                                     setYearRange([
                                         +e.target.value,
@@ -78,12 +119,12 @@ export default function Filters({ onClose, applyFilters }) {
                                     ])
                                 }
                             />
-                            <span> - </span>
                             <input
+                                className="standard-input filter-input"
                                 type="number"
-                                min="1900"
-                                max="2024"
-                                value={yearRange[1]}
+                                placeholder="до"
+                                value={yearRange[1] || ''}
+                                onKeyDown={handleKeyDown}
                                 onChange={(e) =>
                                     setYearRange([
                                         yearRange[0],
@@ -95,14 +136,14 @@ export default function Filters({ onClose, applyFilters }) {
                     </div>
 
                     <div className="filter-group">
-                        <h3>Минимальный рейтинг</h3>
+                        <h3 className="filter-title">Минимальный рейтинг</h3>
                         <input
+                            className="standard-input filter-input"
                             type="number"
-                            min="0"
-                            max="10"
-                            step="0.1"
                             value={rating}
-                            onChange={(e) => setRating(+e.target.value)}
+                            placeholder="0"
+                            onKeyDown={handleKeyDown}
+                            onChange={(e) => setRating(e.target.value)}
                         />
                     </div>
 
