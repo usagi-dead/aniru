@@ -1,0 +1,36 @@
+@import 'Variables';
+
+.anime-catalog {
+    margin: 32px auto;
+    opacity: 0;
+    transition: opacity .3s;
+
+    .anime-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .anime-list-title {
+        font-size: 52px;
+        font-weight: 1000;
+        margin: 32px 0;
+    }
+
+    .anime-top-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .buttons-container {
+        display: flex;
+        gap: 32px;
+    }
+}
+
+.anime-catalog.loaded {
+    opacity: 1;
+}
