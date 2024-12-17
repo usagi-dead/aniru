@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../Styles/SortMenu.css'
+import '../../Styles/HomePage/SortMenu.css'
 
 export default function SortMenu({
     activeButton,

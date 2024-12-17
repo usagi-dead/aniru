@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../../Styles/MainPoster.css'
+import '../../Styles/HomePage/MainPoster.css'
 
 export default function MainPoster() {
     const [loading, setLoading] = useState(true)

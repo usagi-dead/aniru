@@ -50,6 +50,7 @@ header {
             left: calc(50% - 52px);
             top: 24px;
             transform: translateY(-50%);
+            pointer-events: none;
         }
     }
 

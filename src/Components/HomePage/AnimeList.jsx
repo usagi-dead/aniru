@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../../Styles/AnimeList.css'
+import '../../Styles/HomePage/AnimeList.css'
 import AnimeCard from './AnimeCard.jsx'
 import Filters from './Filters.jsx'
 import SortMenu from './SortMenu.jsx'

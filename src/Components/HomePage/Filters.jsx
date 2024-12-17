@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../../Styles/Filters.css'
+import '../../Styles/HomePage/Filters.css'
 
 export default function Filters({
     onClose,
@@ -99,7 +99,7 @@ export default function Filters({
                                         {genre}
                                     </span>
                                 </label>
-                            ))}
+                            ))}{' '}
                         </div>
                     </div>
 
