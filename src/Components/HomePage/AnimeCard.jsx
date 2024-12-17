@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useInView } from 'react-intersection-observer'
-import '../Styles/AnimeCard.css'
+import '../../Styles/AnimeCard.css'
 import AnimeRating from './AnimeRating.jsx'
 
 export default function AnimeCard({ anime }) {

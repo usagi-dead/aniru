@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../Styles/Filters.css'
-import { getFilters } from '../Database/getFilters.js'
+import '../../Styles/Filters.css'
 
 export default function Filters({
     onClose,
@@ -25,7 +24,8 @@ export default function Filters({
     useEffect(() => {
         const fetchFilters = async () => {
             try {
-                const data = await getFilters()
+                const response = await fetch('http://localhost:5000/api/genres')
+                const data = await response.json()
                 data.sort()
                 setGenres(data)
             } catch (error) {

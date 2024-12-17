@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../Styles/MainPoster.css'
-import { getAnimeById } from '../Database/getAnimeById.js'
+import '../../Styles/MainPoster.css'
 
 export default function MainPoster() {
     const [loading, setLoading] = useState(true)
@@ -11,7 +10,11 @@ export default function MainPoster() {
         const fetchMainAnime = async () => {
             setLoading(true)
             try {
-                setMainAnime(await getAnimeById(11))
+                const response = await fetch(
+                    'http://localhost:5000/api/anime/11'
+                )
+                const data = await response.json()
+                setMainAnime(data)
             } catch (error) {
                 console.error('Ошибка при загрузке данных:', error)
             } finally {

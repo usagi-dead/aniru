@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import AnimeList from '../Components/AnimeList.jsx'
-import MainPoster from '../Components/MainPoster.jsx'
+import AnimeList from '../Components/HomePage/AnimeList.jsx'
+import MainPoster from '../Components/HomePage/MainPoster.jsx'
 import '../Styles/HomePage.css'
 
 export default function App() {

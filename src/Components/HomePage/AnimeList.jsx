@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import '../Styles/AnimeList.css'
-import { loadAnimeData } from '../Database/loadAnimeData.js'
+import '../../Styles/AnimeList.css'
 import AnimeCard from './AnimeCard.jsx'
 import Filters from './Filters.jsx'
+import SortMenu from './SortMenu.jsx'
 
 export default function AnimeList() {
     const filters = null
@@ -22,11 +22,13 @@ export default function AnimeList() {
         rating: '',
     })
 
+    // загрузка списка аниме
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
             try {
-                const data = await loadAnimeData()
+                const response = await fetch('http://localhost:5000/api/anime')
+                const data = await response.json()
                 setAnimeList(data)
                 setOriginalAnimeList(data)
             } catch (error) {
@@ -39,6 +41,7 @@ export default function AnimeList() {
         fetchData()
     }, [])
 
+    // применение фильтров
     const handleFiltersApply = (filters) => {
         setCurrentFilters(filters)
 
@@ -65,30 +68,16 @@ export default function AnimeList() {
         setKey((prevKey) => prevKey + 1)
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            try {
-                const data = await loadAnimeData()
-                setAnimeList(data)
-                setOriginalAnimeList(data)
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchData()
-    }, [])
-
+    // переключение сортировки и ее вызов
     const handleClick = (id) => {
         setActiveButton(id)
         sortAnimeList(sortType, id)
     }
 
+    // видимость меню сортировки
     const toggleSortMenu = () => setSortMenuVisible(!sortMenuVisible)
 
+    // сортировка списка аниме
     const sortAnimeList = (type, direction = activeButton || 'descending') => {
         const sortedList = [...animeList]
 
@@ -127,6 +116,7 @@ export default function AnimeList() {
         setKey((prevKey) => prevKey + 1)
     }
 
+    // сброс сортировки
     const resetSort = () => {
         setAnimeList(originalAnimeList)
         setSortButtonText('Сортировать')
@@ -136,6 +126,7 @@ export default function AnimeList() {
         setActiveButton(null)
     }
 
+    // обработка клика за пределами меню сортировки
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -175,69 +166,15 @@ export default function AnimeList() {
                     <h1 className="anime-list-title">Каталог Аниме</h1>
 
                     <div className="buttons-container">
-                        <div className="sort-container">
-                            <button
-                                className="standard-input button image-button sort-button"
-                                onClick={toggleSortMenu}
-                            >
-                                <img
-                                    src="/sort.svg"
-                                    alt="?"
-                                    className="button-icon"
-                                />
-                                {sortButtonText}
-                            </button>
-                            {sortMenuVisible && (
-                                <div className="sort-menu">
-                                    <button
-                                        className="standard-input button sort-item"
-                                        onClick={() => sortAnimeList('name')}
-                                    >
-                                        По имени
-                                    </button>
-                                    <button
-                                        className="standard-input button sort-item"
-                                        onClick={() => sortAnimeList('rating')}
-                                    >
-                                        По рейтингу
-                                    </button>
-                                    <button
-                                        className="standard-input button sort-item"
-                                        onClick={() => sortAnimeList('year')}
-                                    >
-                                        По году
-                                    </button>
-                                    <button
-                                        className="standard-input button sort-item"
-                                        onClick={resetSort}
-                                    >
-                                        Сбросить
-                                    </button>
-                                    <div className="sort-direction">
-                                        {['ascending', 'descending'].map(
-                                            (label) => (
-                                                <button
-                                                    key={label}
-                                                    onClick={() =>
-                                                        handleClick(label)
-                                                    }
-                                                    className={`standard-input button image-button sort-item direction-button + ${activeButton === label ? 'active' : ''}`}
-                                                >
-                                                    <img
-                                                        src={
-                                                            '/' + label + '.svg'
-                                                        }
-                                                        className="button-icon direction-image"
-                                                        alt=""
-                                                    />
-                                                </button>
-                                            )
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
+                        <SortMenu
+                            activeButton={activeButton}
+                            sortAnimeList={sortAnimeList}
+                            resetSort={resetSort}
+                            handleClick={handleClick}
+                            toggleSortMenu={toggleSortMenu}
+                            sortButtonText={sortButtonText}
+                            sortMenuVisible={sortMenuVisible}
+                        />
                         <button
                             className="standard-input button image-button"
                             onClick={() => setFiltersVisible(!filters)}
