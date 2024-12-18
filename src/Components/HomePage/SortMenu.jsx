@@ -3,7 +3,6 @@ import '../../Styles/HomePage/SortMenu.css'
 
 export default function SortMenu({
     activeButton,
-    sortAnimeList,
     resetSort,
     handleClick,
     toggleSortMenu,
@@ -16,52 +15,61 @@ export default function SortMenu({
                 className="standard-input button image-button sort-button"
                 onClick={toggleSortMenu}
             >
-                <img src="/sort.svg" alt="?" className="button-icon" />
+                <img
+                    src="/sort.svg"
+                    alt="?"
+                    className={`button-icon ${activeButton ? 'reflect' : ''}`}
+                />
                 {sortButtonText}
             </button>
-            {sortMenuVisible && (
-                <div className="sort-menu">
-                    <button
-                        className="standard-input button sort-item"
-                        onClick={() => sortAnimeList('name')}
-                    >
-                        По имени
-                    </button>
-                    <button
-                        className="standard-input button sort-item"
-                        onClick={() => sortAnimeList('rating')}
-                    >
-                        По рейтингу
-                    </button>
-                    <button
-                        className="standard-input button sort-item"
-                        onClick={() => sortAnimeList('year')}
-                    >
-                        По году
-                    </button>
-                    <button
-                        className="standard-input button sort-item"
-                        onClick={resetSort}
-                    >
-                        Сбросить
-                    </button>
-                    <div className="sort-direction">
-                        {['ascending', 'descending'].map((label) => (
-                            <button
-                                key={label}
-                                onClick={() => handleClick(label)}
-                                className={`standard-input button image-button sort-item direction-button + ${activeButton === label ? 'active' : ''}`}
-                            >
-                                <img
-                                    src={'/' + label + '.svg'}
-                                    className="button-icon direction-image"
-                                    alt=""
-                                />
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
+
+            <div className={`sort-menu ${sortMenuVisible ? 'active' : ''}`}>
+                <button
+                    className="standard-input image-button sort-item"
+                    onClick={() => {
+                        handleClick(
+                            'name',
+                            sortButtonText === 'По алфавиту'
+                                ? !activeButton
+                                : activeButton
+                        )
+                    }}
+                >
+                    По алфавиту
+                </button>
+                <button
+                    className="standard-input image-button sort-item"
+                    onClick={() => {
+                        handleClick(
+                            'rating',
+                            sortButtonText === 'По рейтингу'
+                                ? !activeButton
+                                : activeButton
+                        )
+                    }}
+                >
+                    По рейтингу
+                </button>
+                <button
+                    className="standard-input image-button sort-item"
+                    onClick={() => {
+                        handleClick(
+                            'year',
+                            sortButtonText === 'По году'
+                                ? !activeButton
+                                : activeButton
+                        )
+                    }}
+                >
+                    По году
+                </button>
+                <button
+                    className="standard-input button sort-item"
+                    onClick={resetSort}
+                >
+                    Сбросить
+                </button>
+            </div>
         </div>
     )
 }

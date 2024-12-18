@@ -25,6 +25,7 @@ body {
   cursor: pointer;
 }
 
+.image-button:hover,
 .button:hover {
   background-color: rgb(238, 238, 238);
   color: black;
@@ -37,7 +38,11 @@ body {
 
 .button-icon {
   width: 20px;
-  transition: filter 0.3s;
+  transition: filter 0.3s, transform 0.3s;
+}
+
+.reflect {
+  transform: scaleY(-1);
 }
 
 .image-button {
@@ -67,6 +72,25 @@ input[type=number]::-webkit-outer-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.overlay {
+  background-color: rgba(30, 30, 30, 0.9);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 20;
+  backdrop-filter: blur(20px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.overlay.active {
+  pointer-events: auto;
+  opacity: 1;
 }
 
 /*# sourceMappingURL=index.css.map */

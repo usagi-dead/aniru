@@ -11,7 +11,6 @@ export default function AnimeList() {
     const [originalAnimeList, setOriginalAnimeList] = useState([])
     const [loading, setLoading] = useState(true)
     const [imagesLoad, setImagesLoad] = useState(false)
-    const [sortType, setSortType] = useState(null)
     const [sortButtonText, setSortButtonText] = useState('Сортировать')
     const [key, setKey] = useState(0)
     const [activeButton, setActiveButton] = useState(null)
@@ -69,30 +68,30 @@ export default function AnimeList() {
     }
 
     // переключение сортировки и ее вызов
-    const handleClick = (id) => {
+    const handleClick = (_sortType, id) => {
         setActiveButton(id)
-        sortAnimeList(sortType, id)
+        sortAnimeList(_sortType, id)
     }
 
     // видимость меню сортировки
     const toggleSortMenu = () => setSortMenuVisible(!sortMenuVisible)
 
     // сортировка списка аниме
-    const sortAnimeList = (type, direction = activeButton || 'descending') => {
+    const sortAnimeList = (type, direction = activeButton || false) => {
         const sortedList = [...animeList]
 
         switch (type) {
             case 'name':
                 sortedList.sort((a, b) =>
-                    direction === 'ascending'
+                    direction === true
                         ? a.title.localeCompare(b.title)
                         : b.title.localeCompare(a.title)
                 )
-                setSortButtonText('По имени')
+                setSortButtonText('По алфавиту')
                 break
             case 'rating':
                 sortedList.sort((a, b) =>
-                    direction === 'ascending'
+                    direction === true
                         ? a.rating - b.rating
                         : b.rating - a.rating
                 )
@@ -100,7 +99,7 @@ export default function AnimeList() {
                 break
             case 'year':
                 sortedList.sort((a, b) =>
-                    direction === 'ascending'
+                    direction === true
                         ? a.release_year - b.release_year
                         : b.release_year - a.release_year
                 )
@@ -111,7 +110,6 @@ export default function AnimeList() {
         }
 
         setAnimeList(sortedList)
-        setSortType(type)
         setActiveButton(direction)
         setKey((prevKey) => prevKey + 1)
     }
@@ -120,7 +118,6 @@ export default function AnimeList() {
     const resetSort = () => {
         setAnimeList(originalAnimeList)
         setSortButtonText('Сортировать')
-        setSortType(null)
         setKey((prevKey) => prevKey + 1)
         setSortMenuVisible(false)
         setActiveButton(null)
@@ -150,14 +147,12 @@ export default function AnimeList() {
 
     return (
         <>
-            {filtersVisible && (
-                <Filters
-                    check={filtersVisible}
-                    onClose={() => setFiltersVisible(false)}
-                    applyFilters={handleFiltersApply}
-                    initialFilters={currentFilters}
-                />
-            )}
+            <Filters
+                check={filtersVisible}
+                onClose={() => setFiltersVisible(false)}
+                applyFilters={handleFiltersApply}
+                initialFilters={currentFilters}
+            />
 
             <div
                 className={`container anime-catalog ${imagesLoad ? 'loaded' : ''}`}

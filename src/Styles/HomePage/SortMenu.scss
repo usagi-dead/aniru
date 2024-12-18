@@ -8,6 +8,12 @@
         justify-content: center;
     }
 
+    .sort-menu.active {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
     .sort-menu {
         position: absolute;
         top: 64px;
@@ -23,37 +29,22 @@
         flex-direction: column;
         gap: 16px;
         z-index: 10;
-        animation: fadeInTransform 0.3s;
+        opacity: 0;
+        transform: translateY(-64px);
+        pointer-events: none;
+        transition:
+            opacity 0.3s ease-in-out,
+            transform 0.3s ease-in-out;
 
         .sort-item {
             min-height: 40px;
             padding: 0;
             flex: 1;
+            gap: 2px;
         }
 
-        .sort-direction {
-            width: 100%;
-            display: flex;
-            gap: 16px;
-
-            .direction-button {
-                max-height: 40px;
-
-                .direction-image {
-                    height: 16px;
-                }
-            }
+        .direction-image {
+            height: 16px;
         }
     }
-}
-
-@keyframes fadeInTransform {
-  from {
-    opacity: 0;
-    transform: translateY(-64px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

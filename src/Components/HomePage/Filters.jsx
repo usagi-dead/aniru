@@ -37,11 +37,8 @@ export default function Filters({
     }, [])
 
     useEffect(() => {
-        if (check) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'auto'
-        }
+        if (check) document.body.style.overflow = 'hidden'
+        else document.body.style.overflow = 'auto'
 
         return () => {
             document.body.style.overflow = 'auto'
@@ -69,8 +66,13 @@ export default function Filters({
 
     return (
         <>
-            <div className="filters-overlay" onClick={onClose} />
-            <div className="filters-container container">
+            <div
+                className={`overlay ${check ? 'active' : ''}`}
+                onClick={onClose}
+            />
+            <div
+                className={`filters-container container ${check ? 'active' : ''}`}
+            >
                 <div className="filters-top-container">
                     <h1 className="filters-title">Фильтры</h1>
                     <button
