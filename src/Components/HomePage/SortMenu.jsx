@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../../Styles/HomePage/SortMenu.css'
 
 export default function SortMenu({
@@ -8,7 +8,16 @@ export default function SortMenu({
     toggleSortMenu,
     sortButtonText,
     sortMenuVisible,
+    closeSortMenu,
 }) {
+    useEffect(() => {
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') closeSortMenu()
+        }
+
+        window.addEventListener('keydown', handleKeydown)
+    }, [])
+
     return (
         <div className="sort-container">
             <button

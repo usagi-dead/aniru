@@ -30,8 +30,6 @@ export default function AnimeList() {
                 const data = await response.json()
                 setAnimeList(data)
                 setOriginalAnimeList(data)
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error)
             } finally {
                 setLoading(false)
             }
@@ -169,6 +167,7 @@ export default function AnimeList() {
                             toggleSortMenu={toggleSortMenu}
                             sortButtonText={sortButtonText}
                             sortMenuVisible={sortMenuVisible}
+                            closeSortMenu={() => setSortMenuVisible(false)}
                         />
                         <button
                             className="standard-input button image-button"

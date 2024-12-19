@@ -1,0 +1,144 @@
+search {
+    position: relative;
+    transition:
+        transform 0.3s ease-in-out,
+        scale 0.3s ease-in-out;
+    z-index: 20;
+
+    .search-icon {
+        position: absolute;
+        left: calc(50% - 52px);
+        top: 24px;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    input[type='search'] {
+        width: 512px;
+        max-width: 48vw;
+    }
+
+    input[type='search']::placeholder {
+        color: rgb(122, 122, 122);
+    }
+
+    search:hover input[type='search'] {
+        background-color: rgba(96, 96, 96, 0.8);
+    }
+
+    input[type='search']:not(:placeholder-shown) + .search-icon {
+        opacity: 0;
+    }
+}
+
+search.active {
+    transform: translateY(20px);
+    scale: 1.2;
+}
+
+.search-results.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px);
+    pointer-events: auto;
+}
+
+.search-results {
+    position: absolute;
+    max-width: 1000px;
+    max-height: calc(100vh - 180px);
+    top: 138px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-64px);
+    border-radius: 64px;
+    background-color: rgba(238, 238, 238, 0.15);
+    min-height: 400px;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform 0.3s ease-in-out,
+        opacity 0.3s ease-in-out;
+
+    .results-content {
+        margin: 32px;
+        padding: 16px;
+        max-height: calc(100vh - 276px);
+        overflow-y: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px;
+        scrollbar-color: white transparent;
+    }
+
+    .comment {
+        font-size: 24px;
+        font-weight: 900;
+    }
+
+    .search-card {
+        height: 300px;
+        min-width: 90%;
+        display: flex;
+        flex: 1;
+        position: relative;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        .search-card__img {
+            height: 100%;
+            min-width: 200px;
+            max-width: 200px;
+            object-fit: cover;
+            border-radius: 16px;
+            z-index: 2;
+        }
+
+        .search-card__img.blurred {
+            position: absolute;
+            filter: blur(6px);
+            z-index: 1;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 40px;
+            max-width: 80%;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        .anime-rating {
+            right: 40px;
+            top: 32px;
+            scale: 1.3;
+            z-index: 3;
+            opacity: 0;
+            transform: translateY(-32px);
+            transition:
+                opacity 0.3s,
+                transform 0.3s;
+        }
+
+        .text-container {
+            transition: padding 0.3s;
+            padding: 0 32px;
+        }
+    }
+
+    .search-card:hover {
+        background-color: rgba(30, 30, 30, 0.3);
+
+        .text-container {
+            transition: padding 0.3s;
+            padding: 32px;
+        }
+
+        .anime-rating {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}

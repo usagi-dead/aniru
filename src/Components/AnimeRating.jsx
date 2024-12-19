@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../Styles/HomePage/AnimeRating.css'
+import '../Styles/AnimeRating.css'
 
 export default function AnimeRating({ rating }) {
     return (

@@ -40,6 +40,12 @@ export default function Filters({
         if (check) document.body.style.overflow = 'hidden'
         else document.body.style.overflow = 'auto'
 
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') onClose()
+        }
+
+        window.addEventListener('keydown', handleKeydown)
+
         return () => {
             document.body.style.overflow = 'auto'
         }

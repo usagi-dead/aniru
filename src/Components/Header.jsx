@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../Styles/Header.css'
+import Search from './Search'
 
 const AnimeCatalog = () => {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -23,22 +24,7 @@ const AnimeCatalog = () => {
                 <div className="header-align container">
                     <img src="/aniru.svg" alt="aniru" className="logo" />
 
-                    <search>
-                        <form action="./search/">
-                            <input
-                                type="search"
-                                id="anime"
-                                name="q"
-                                placeholder="Поиск"
-                                className="standard-input"
-                            />
-                            <img
-                                src="/search.svg"
-                                alt="🔍"
-                                className="search-icon"
-                            />
-                        </form>
-                    </search>
+                    <Search />
 
                     <button className="standard-input button">Войти</button>
                 </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import '../../Styles/HomePage/AnimeCard.css'
-import AnimeRating from './AnimeRating.jsx'
+import AnimeRating from '../AnimeRating.jsx'
 
 export default function AnimeCard({ anime }) {
     const [fasterTransition, setFasterTransition] = useState(false)

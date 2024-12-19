@@ -116,6 +116,44 @@ app.get('/api/genres', (req, res) => {
     })
 })
 
+app.get('/api/search', (req, res) => {
+    const query = `SELECT
+            a.id,
+            a.title,
+            a.description,
+            a.release_year,
+            a.rating,
+            a.image_url,
+            GROUP_CONCAT(g.name, ', ') AS genres
+        FROM Anime a
+        LEFT JOIN AnimeGenres ag ON a.id = ag.anime_id
+        LEFT JOIN Genres g ON ag.genre_id = g.id
+        GROUP BY a.id`
+
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message })
+        } else {
+            const searchTerm = req.query.q ? req.query.q.toLowerCase() : ''
+            const filteredRows = rows.filter((row) =>
+                row.title.toLowerCase().includes(searchTerm)
+            )
+
+            filteredRows.sort((a, b) => {
+                if (a.title.toLowerCase().startsWith(searchTerm)) {
+                    return -1
+                } else if (b.title.toLowerCase().startsWith(searchTerm)) {
+                    return 1
+                } else {
+                    return 0
+                }
+            })
+
+            res.json(filteredRows)
+        }
+    })
+})
+
 // Запуск сервера
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`)

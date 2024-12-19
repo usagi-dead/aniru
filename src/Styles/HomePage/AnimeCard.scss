@@ -97,36 +97,6 @@
         margin: 5px 0;
     }
 
-    .anime-rating {
-        position: absolute;
-        right: 16px;
-        top: 16px;
-        width: fit-content;
-        display: flex;
-        align-items: center;
-        padding: 8px 16px;
-        gap: 8px;
-        border-radius: 16px;
-        opacity: 0.9;
-    }
-
-    .green {
-        background-color: #00aa47;
-        border: 2px solid #00d95a;
-        box-shadow: 0 0 16px 2px rgba(0, 170, 70, 0.8);
-    }
-
-    .yellow {
-        background-color: #d9bc01;
-        border: 2px solid #ffdf14;
-        box-shadow: 0 0 16px 2px rgb(217, 188, 1, 0.8);
-    }
-
-    .anime-rating-text {
-        font-weight: 1000;
-        font-size: 20px;
-    }
-
     .anime-text {
         margin-top: 32px;
     }
