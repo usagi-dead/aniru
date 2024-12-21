@@ -63,21 +63,30 @@ app.get('/api/anime', (req, res) => {
             a.title, 
             a.description, 
             a.release_year, 
-            a.rating, 
             a.image_url,
-            GROUP_CONCAT(g.name, ', ') AS genres
+            GROUP_CONCAT(g.name, ', ') AS genres,
+            COALESCE(ROUND(AVG(r.rating), 1), 1) AS average_rating
         FROM Anime a
         LEFT JOIN AnimeGenres ag ON a.id = ag.anime_id
         LEFT JOIN Genres g ON ag.genre_id = g.id
+        LEFT JOIN AnimeReviews r ON a.id = r.anime_id
         GROUP BY a.id
     `
 
     db.all(query, [], (err, rows) => {
         if (err) {
-            res.status(500).json({ error: err.message })
-        } else {
-            res.json(rows)
+            return res.status(500).json({ error: err.message })
         }
+
+        rows.forEach((row) => {
+            if (row.genres) {
+                const genresArray = row.genres.split(', ')
+                const uniqueGenres = Array.from(new Set(genresArray)) // Убираем дубликаты
+                row.genres = uniqueGenres.join(', ') // Собираем обратно в строку
+            }
+        })
+
+        res.json(rows)
     })
 })
 
@@ -88,24 +97,32 @@ app.get('/api/anime/:id', (req, res) => {
             a.title, 
             a.description, 
             a.release_year, 
-            a.rating, 
             a.image_url,
-            GROUP_CONCAT(g.name, ', ') AS genres
+            GROUP_CONCAT(g.name, ', ') AS genres,
+            COALESCE(ROUND(AVG(r.rating), 1), 0) AS average_rating
         FROM Anime a
         LEFT JOIN AnimeGenres ag ON a.id = ag.anime_id
         LEFT JOIN Genres g ON ag.genre_id = g.id
+        LEFT JOIN AnimeReviews r ON a.id = r.anime_id
         WHERE a.id = ?
         GROUP BY a.id
     `
     const params = [req.params.id]
     db.get(query, params, (err, row) => {
         if (err) {
-            res.status(500).json({ error: err.message })
-        } else if (!row) {
-            res.status(404).json({ error: 'Аниме не найдено.' })
-        } else {
-            res.json(row)
+            return res.status(500).json({ error: err.message })
         }
+        if (!row) {
+            return res.status(404).json({ error: 'Аниме не найдено.' })
+        }
+
+        if (row.genres) {
+            const genresArray = row.genres.split(', ')
+            const uniqueGenres = Array.from(new Set(genresArray)) // Убираем дубликаты
+            row.genres = uniqueGenres.join(', ') // Собираем обратно в строку
+        }
+
+        res.json(row)
     })
 })
 
@@ -122,18 +139,21 @@ app.get('/api/genres', (req, res) => {
 })
 
 app.get('/api/search', (req, res) => {
-    const query = `SELECT
+    const query = `
+        SELECT
             a.id,
             a.title,
             a.description,
             a.release_year,
-            a.rating,
             a.image_url,
-            GROUP_CONCAT(g.name, ', ') AS genres
+            GROUP_CONCAT(g.name, ', ') AS genres,
+            COALESCE(ROUND(AVG(r.rating), 1), 0) AS average_rating
         FROM Anime a
         LEFT JOIN AnimeGenres ag ON a.id = ag.anime_id
         LEFT JOIN Genres g ON ag.genre_id = g.id
-        GROUP BY a.id`
+        LEFT JOIN AnimeReviews r ON a.id = r.anime_id
+        GROUP BY a.id
+    `
 
     db.all(query, [], (err, rows) => {
         if (err) {
@@ -209,6 +229,118 @@ app.post('/api/login', (req, res) => {
             expiresIn: '1h',
         })
         res.json({ token })
+    })
+})
+
+// Добавление отзыва и рейтинга для аниме
+app.post('/api/review', (req, res) => {
+    const { user_id, anime_id, rating, review } = req.body
+
+    if (!user_id || !anime_id || !rating) {
+        return res
+            .status(400)
+            .json({ error: 'Поля user_id, anime_id и rating обязательны.' })
+    }
+
+    const query =
+        'INSERT INTO AnimeReviews (user_id, anime_id, rating, review) VALUES (?, ?, ?, ?)'
+    db.run(query, [user_id, anime_id, rating, review], function (err) {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        res.status(201).json({ message: 'Отзыв добавлен.' })
+    })
+})
+
+// Получение всех отзывов для конкретного аниме
+app.get('/api/anime/:id/reviews', (req, res) => {
+    const query = `
+        SELECT r.rating, r.review, u.username, r.created_at
+        FROM AnimeReviews r
+        JOIN Users u ON r.user_id = u.id
+        WHERE r.anime_id = ?
+        ORDER BY r.created_at DESC
+    `
+    const params = [req.params.id]
+    db.all(query, params, (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        res.json(rows)
+    })
+})
+
+// Получение среднего рейтинга аниме
+app.get('/api/anime/:id/average-rating', (req, res) => {
+    const query = `
+        SELECT ROUND(AVG(rating), 1) AS average_rating
+        FROM AnimeReviews
+        WHERE anime_id = ?
+    `
+    const params = [req.params.id]
+    db.get(query, params, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        const averageRating = row.average_rating || 0
+        res.json({ average_rating: averageRating })
+    })
+})
+
+// Добавление аниме в избранное
+app.post('/api/favorites', (req, res) => {
+    const { user_id, anime_id } = req.body
+
+    if (!user_id || !anime_id) {
+        return res
+            .status(400)
+            .json({ error: 'Поля user_id и anime_id обязательны.' })
+    }
+
+    const query = 'INSERT INTO UserFavorites (user_id, anime_id) VALUES (?, ?)'
+    db.run(query, [user_id, anime_id], function (err) {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        res.status(201).json({ message: 'Аниме добавлено в избранное.' })
+    })
+})
+
+// Получение всех отзывов пользователя
+app.get('/api/user/:userId/reviews', (req, res) => {
+    const query = `
+        SELECT r.rating, r.review, a.title AS anime_title, a.id AS anime_id, r.created_at
+        FROM AnimeReviews r
+        JOIN Anime a ON r.anime_id = a.id
+        WHERE r.user_id = ?
+        ORDER BY r.created_at DESC
+    `
+    const params = [req.params.userId]
+    db.all(query, params, (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        res.json(rows)
+    })
+})
+
+// Получение списка избранных аниме пользователя
+app.get('/api/user/:userId/favorites', (req, res) => {
+    const query = `
+        SELECT a.id, a.title, a.image_url
+        FROM UserFavorites uf
+        JOIN Anime a ON uf.anime_id = a.id
+        WHERE uf.user_id = ?
+    `
+    const params = [req.params.userId]
+    db.all(query, params, (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        if (rows.length === 0) {
+            return res.json({ message: 'У вас нет избранных аниме.' })
+        }
+        res.json(rows)
     })
 })
 

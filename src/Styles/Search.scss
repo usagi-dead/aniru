@@ -52,7 +52,8 @@ search.active {
 
 .search-results {
     position: absolute;
-    max-width: 1000px;
+    width: 1000px;
+    max-width: calc(100% - 64px);
     max-height: calc(100vh - 180px);
     top: 138px;
     left: 50%;
@@ -91,6 +92,7 @@ search.active {
         position: relative;
         border-radius: 16px;
         cursor: pointer;
+        overflow-y: auto;
         transition: background-color 0.3s;
 
         .search-card__img {

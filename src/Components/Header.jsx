@@ -5,7 +5,7 @@ import '../Styles/Header.css'
 import Search from './Search'
 
 const Header = () => {
-    const { user, logout } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const [animation, setAnimation] = useState(false)
     const [scrolled, setScrolled] = useState(false)
 
@@ -39,29 +39,19 @@ const Header = () => {
 
                     <Search />
 
-                    <div className="buttons-container">
-                        {user ? (
-                            <>
-                                <Link to="/profile">
-                                    <button className="standard-input button">
-                                        Профиль
-                                    </button>
-                                </Link>
-                                <button
-                                    className="standard-input button"
-                                    onClick={logout}
-                                >
-                                    Выйти
-                                </button>
-                            </>
-                        ) : (
-                            <Link to="/login">
-                                <button className="standard-input button">
-                                    Войти
-                                </button>
-                            </Link>
-                        )}
-                    </div>
+                    {user ? (
+                        <Link to="/profile">
+                            <button className="standard-input button">
+                                Профиль
+                            </button>
+                        </Link>
+                    ) : (
+                        <Link to="/login">
+                            <button className="standard-input button">
+                                Войти
+                            </button>
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>

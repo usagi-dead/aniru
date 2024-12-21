@@ -45,7 +45,8 @@ search.active form {
 
 .search-results {
   position: absolute;
-  max-width: 1000px;
+  width: 1000px;
+  max-width: calc(100% - 64px);
   max-height: calc(100vh - 180px);
   top: 138px;
   left: 50%;
@@ -80,6 +81,7 @@ search.active form {
   position: relative;
   border-radius: 16px;
   cursor: pointer;
+  overflow-y: auto;
   transition: background-color 0.3s;
 }
 .search-results .search-card .search-card__img {

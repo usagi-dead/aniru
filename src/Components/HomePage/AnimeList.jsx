@@ -28,8 +28,20 @@ export default function AnimeList() {
             try {
                 const response = await fetch('http://localhost:5000/api/anime')
                 const data = await response.json()
-                setAnimeList(data)
-                setOriginalAnimeList(data)
+
+                if (Array.isArray(data)) {
+                    setAnimeList(data)
+                    setOriginalAnimeList(data)
+                } else {
+                    console.error(
+                        'Полученные данные не являются массивом:',
+                        data
+                    )
+                    setAnimeList([])
+                }
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error)
+                setAnimeList([])
             } finally {
                 setLoading(false)
             }
@@ -90,8 +102,8 @@ export default function AnimeList() {
             case 'rating':
                 sortedList.sort((a, b) =>
                     direction === true
-                        ? a.rating - b.rating
-                        : b.rating - a.rating
+                        ? a.average_rating - b.average_rating
+                        : b.average_rating - a.average_rating
                 )
                 setSortButtonText('По рейтингу')
                 break

@@ -110,7 +110,7 @@ const Search = () => {
                     )}
                     {results.map((result) => (
                         <div key={result.id} className="search-card">
-                            <AnimeRating rating={result.rating} />
+                            <AnimeRating rating={result.average_rating} />
 
                             <img
                                 src={`/posters/${result.image_url}.jpg`}
