@@ -26,7 +26,7 @@ export default function MainPoster() {
     }, [])
 
     if (loading) {
-        return <div>Загрузка...</div>
+        return <div></div>
     }
 
     const handleImageLoad = () => {

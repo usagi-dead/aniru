@@ -136,7 +136,7 @@ export default function AnimeList() {
     }, [])
 
     if (loading) {
-        return <div>Загрузка...</div>
+        return <div></div>
     }
 
     setTimeout(() => {
