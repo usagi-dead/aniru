@@ -93,4 +93,9 @@ input[type=number] {
   opacity: 1;
 }
 
+.buttons-container {
+  display: flex;
+  gap: 16px;
+}
+
 /*# sourceMappingURL=index.css.map */

@@ -50,11 +50,6 @@
   overflow: auto;
   gap: 12px;
 }
-.filters-container .filter-range,
-.filters-container .filters-actions {
-  display: flex;
-  gap: 16px;
-}
 .filters-container .filters-actions {
   position: absolute;
   bottom: 32px;

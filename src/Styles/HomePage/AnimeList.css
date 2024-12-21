@@ -20,10 +20,6 @@
   align-items: center;
   justify-content: space-between;
 }
-.anime-catalog .buttons-container {
-  display: flex;
-  gap: 32px;
-}
 
 .anime-catalog.loaded {
   opacity: 1;

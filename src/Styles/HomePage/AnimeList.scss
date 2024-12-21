@@ -1,4 +1,4 @@
-@import 'Variables';
+@import '../Variables';
 
 .anime-catalog {
     margin: 32px auto;
@@ -23,11 +23,6 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-    }
-
-    .buttons-container {
-        display: flex;
-        gap: 32px;
     }
 }
 

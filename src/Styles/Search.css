@@ -1,31 +1,39 @@
 search {
-  position: relative;
-  transition: transform 0.3s ease-in-out, scale 0.3s ease-in-out;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.3s ease-in-out;
   z-index: 20;
 }
-search .search-icon {
+search form {
+  position: relative;
+  transition: scale 0.3s ease-in-out;
+}
+search form .search-icon {
   position: absolute;
   left: calc(50% - 52px);
   top: 24px;
   transform: translateY(-50%);
   pointer-events: none;
 }
-search input[type=search] {
+search form input[type=search] {
   width: 512px;
   max-width: 48vw;
 }
-search input[type=search]::placeholder {
+search form input[type=search]::placeholder {
   color: rgb(122, 122, 122);
 }
-search search:hover input[type=search] {
+search form search:hover input[type=search] {
   background-color: rgba(96, 96, 96, 0.8);
 }
-search input[type=search]:not(:placeholder-shown) + .search-icon {
+search form input[type=search]:not(:placeholder-shown) + .search-icon {
   opacity: 0;
 }
 
 search.active {
-  transform: translateY(20px);
+  transform: translateX(-50%) translateY(20px);
+}
+search.active form {
   scale: 1.2;
 }
 

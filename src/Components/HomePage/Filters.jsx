@@ -113,7 +113,7 @@ export default function Filters({
 
                     <div className="filter-group">
                         <h3 className="filter-title">Год выпуска</h3>
-                        <div className="filter-range">
+                        <div className="buttons-container filter-range">
                             <input
                                 className="standard-input filter-input"
                                 type="number"
@@ -155,7 +155,7 @@ export default function Filters({
                         />
                     </div>
 
-                    <div className="filters-actions">
+                    <div className="buttons-container filters-actions">
                         <button
                             className="standard-input button"
                             onClick={handleResetFilters}

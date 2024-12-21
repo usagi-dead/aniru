@@ -9,14 +9,12 @@ const Search = () => {
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const handleFocus = () => setIsActive(true)
     const handleBlur = () => {
         setIsActive(false)
         setQuery('')
         setResults([])
     }
 
-    // Закрытие поиска при нажатии Escape
     useEffect(() => {
         if (isActive) document.body.style.overflow = 'hidden'
         else document.body.style.overflow = 'auto'
@@ -41,7 +39,6 @@ const Search = () => {
         }
     }, [isActive])
 
-    // Обработка ввода
     const handleFormSubmit = (e) => {
         e.preventDefault()
     }
@@ -69,7 +66,6 @@ const Search = () => {
         return () => clearTimeout(timeoutId)
     }, [query])
 
-    // Обновление состояния при вводе текста
     const handleChange = (e) => {
         setQuery(e.target.value)
         if (e.target.value) {
