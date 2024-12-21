@@ -7,11 +7,15 @@ header {
     .header-back {
         padding: 16px 0;
         width: 100%;
-        background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
+        background: linear-gradient(
+            rgba(20, 20, 20, 0.8),
+            rgba(30, 30, 30, 0.8)
+        );
         backdrop-filter: blur(20px);
-
         outline: rgba(0, 0, 0, 0) solid 2px;
-        transition: box-shadow .3s, outline .3s;
+        transition:
+            box-shadow 0.3s,
+            outline 0.3s;
     }
 
     .header-align {

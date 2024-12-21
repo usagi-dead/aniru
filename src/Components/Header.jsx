@@ -1,36 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { AuthContext } from '../Context/AuthContext'
 import '../Styles/Header.css'
 import Search from './Search'
 
-const AnimeCatalog = () => {
-    const [isScrolled, setIsScrolled] = useState(false)
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollTop = window.scrollY
-            setIsScrolled(scrollTop > 0)
-        }
-
-        window.addEventListener('scroll', handleScroll)
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
+const Header = () => {
+    const { user, logout } = useContext(AuthContext)
 
     return (
         <header>
-            <div className={`header-back ${isScrolled ? 'scrolled' : ''}`}>
+            <div className="header-back">
                 <div className="header-align container">
-                    <img src="/aniru.svg" alt="aniru" className="logo" />
+                    <Link to="/">
+                        <img src="/aniru.svg" alt="aniru" className="logo" />
+                    </Link>
 
                     <Search />
 
-                    <button className="standard-input button">Войти</button>
+                    {user ? (
+                        <>
+                            <Link to="/profile">
+                                <button className="standard-input button">
+                                    Профиль
+                                </button>
+                            </Link>
+                            {/*<button*/}
+                            {/*    className="standard-input button"*/}
+                            {/*    onClick={logout}*/}
+                            {/*>*/}
+                            {/*    Выйти*/}
+                            {/*</button>*/}
+                        </>
+                    ) : (
+                        <Link to="/login">
+                            <button className="standard-input button">
+                                Войти
+                            </button>
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>
     )
 }
 
-export default AnimeCatalog
+export default Header
