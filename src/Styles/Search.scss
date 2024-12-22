@@ -19,7 +19,6 @@ search {
 
         input[type='search'] {
             width: 512px;
-            max-width: 48vw;
         }
 
         input[type='search']::placeholder {
@@ -92,7 +91,6 @@ search.active {
         position: relative;
         border-radius: 16px;
         cursor: pointer;
-        overflow-y: auto;
         transition: background-color 0.3s;
 
         .search-card__img {
@@ -149,6 +147,16 @@ search.active {
         .anime-rating {
             opacity: 1;
             transform: translateY(0);
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    search {
+        form {
+            input[type='search'] {
+                width: 40vw;
+            }
         }
     }
 }

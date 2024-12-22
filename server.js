@@ -228,9 +228,21 @@ app.post('/api/login', (req, res) => {
         const token = jwt.sign({ id: user.id, username }, secretKey, {
             expiresIn: '1h',
         })
-        res.json({ token })
+        res.json({ token, user: { id: user.id, username } })
     })
 })
+
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers.authorization
+    if (!authHeader) return res.status(401).json({ error: 'Не авторизован.' })
+
+    const token = authHeader.split(' ')[1]
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) return res.status(403).json({ error: 'Неверный токен.' })
+        req.user = decoded // Декодированные данные токена
+        next()
+    })
+}
 
 // Добавление отзыва и рейтинга для аниме
 app.post('/api/review', (req, res) => {
@@ -307,7 +319,7 @@ app.post('/api/favorites', (req, res) => {
 })
 
 // Получение всех отзывов пользователя
-app.get('/api/user/:userId/reviews', (req, res) => {
+app.get('/api/user/:userId/reviews', verifyToken, (req, res) => {
     const query = `
         SELECT r.rating, r.review, a.title AS anime_title, a.id AS anime_id, r.created_at
         FROM AnimeReviews r
@@ -325,7 +337,7 @@ app.get('/api/user/:userId/reviews', (req, res) => {
 })
 
 // Получение списка избранных аниме пользователя
-app.get('/api/user/:userId/favorites', (req, res) => {
+app.get('/api/user/:userId/favorites', verifyToken, (req, res) => {
     const query = `
         SELECT a.id, a.title, a.image_url
         FROM UserFavorites uf
@@ -336,9 +348,6 @@ app.get('/api/user/:userId/favorites', (req, res) => {
     db.all(query, params, (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message })
-        }
-        if (rows.length === 0) {
-            return res.json({ message: 'У вас нет избранных аниме.' })
         }
         res.json(rows)
     })

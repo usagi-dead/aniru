@@ -1,4 +1,3 @@
-// src/Context/AuthContext.js
 import React, { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
 
@@ -11,19 +10,20 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user')
-        if (storedUser) {
+        const token = localStorage.getItem('token')
+        if (storedUser && token) {
             const userData = JSON.parse(storedUser)
             setUser(userData)
-            fetchUserReviews(userData.id)
-            fetchUserFavorites(userData.id)
+            fetchUserReviews(userData.id, token)
+            fetchUserFavorites(userData.id, token)
         }
     }, [])
 
-    // Функция для загрузки отзывов пользователя
-    const fetchUserReviews = async (userId) => {
+    const fetchUserReviews = async (userId, token) => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/user/${userId}/reviews`
+                `http://localhost:5000/api/user/${userId}/reviews`,
+                { headers: { Authorization: `Bearer ${token}` } }
             )
             setReviews(response.data)
         } catch (error) {
@@ -31,11 +31,11 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    // Функция для загрузки избранных аниме пользователя
-    const fetchUserFavorites = async (userId) => {
+    const fetchUserFavorites = async (userId, token) => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/user/${userId}/favorites`
+                `http://localhost:5000/api/user/${userId}/favorites`,
+                { headers: { Authorization: `Bearer ${token}` } }
             )
             setFavorites(response.data)
         } catch (error) {
@@ -44,11 +44,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     const login = (userData) => {
-        setUser(userData)
-        localStorage.setItem('user', JSON.stringify(userData))
-        // Загружаем данные о пользователе
-        fetchUserReviews(userData.id)
-        fetchUserFavorites(userData.id)
+        setUser(userData.user)
+        localStorage.setItem('user', JSON.stringify(userData.user))
+        localStorage.setItem('token', userData.token)
+        fetchUserReviews(userData.user.id, userData.token)
+        fetchUserFavorites(userData.user.id, userData.token)
     }
 
     const logout = () => {
@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         setReviews([])
         setFavorites([])
         localStorage.removeItem('user')
+        localStorage.removeItem('token')
     }
 
     return (

@@ -1,4 +1,3 @@
-// src/Pages/ProfilePage.js
 import React, { useContext } from 'react'
 import { AuthContext } from '../Context/AuthContext'
 

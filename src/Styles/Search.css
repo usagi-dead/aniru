@@ -18,7 +18,6 @@ search form .search-icon {
 }
 search form input[type=search] {
   width: 512px;
-  max-width: 48vw;
 }
 search form input[type=search]::placeholder {
   color: rgb(122, 122, 122);
@@ -81,7 +80,6 @@ search.active form {
   position: relative;
   border-radius: 16px;
   cursor: pointer;
-  overflow-y: auto;
   transition: background-color 0.3s;
 }
 .search-results .search-card .search-card__img {
@@ -128,6 +126,12 @@ search.active form {
 .search-results .search-card:hover .anime-rating {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  search form input[type=search] {
+    width: 40vw;
+  }
 }
 
 /*# sourceMappingURL=Search.css.map */
