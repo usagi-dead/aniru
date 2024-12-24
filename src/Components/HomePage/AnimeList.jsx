@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../Styles/HomePage/AnimeList.css'
-import AnimeCard from './AnimeCard.jsx'
+import AnimeCard from '../AnimeCard.jsx'
 import Filters from './Filters.jsx'
 import SortMenu from './SortMenu.jsx'
 
@@ -187,7 +187,7 @@ export default function AnimeList() {
                         >
                             Фильтры
                             <img
-                                src="/filters.svg"
+                                src="/media/filters.svg"
                                 alt="?"
                                 className="button-icon"
                             />

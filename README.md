@@ -1,6 +1,6 @@
 # React + Vite
 
-![Project Avatar](public/aniru-small.svg)
+![Project Avatar](public/logo/aniru-small.svg)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

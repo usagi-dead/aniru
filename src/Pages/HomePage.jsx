@@ -7,11 +7,9 @@ export default function App() {
     const [showAnimeList, setShowAnimeList] = useState(false)
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        setTimeout(() => {
             setShowAnimeList(true)
         }, 200)
-
-        return () => clearTimeout(timer)
     }, [])
 
     return (

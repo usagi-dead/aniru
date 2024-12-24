@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 export const AuthContext = createContext()
 
@@ -10,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user')
-        const token = localStorage.getItem('token')
+        const token = Cookies.get('token')
         if (storedUser && token) {
             const userData = JSON.parse(storedUser)
             setUser(userData)
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }) => {
     const login = (userData) => {
         setUser(userData.user)
         localStorage.setItem('user', JSON.stringify(userData.user))
-        localStorage.setItem('token', userData.token)
+        Cookies.set('token', userData.token, { expires: 1 })
         fetchUserReviews(userData.user.id, userData.token)
         fetchUserFavorites(userData.user.id, userData.token)
     }
@@ -56,12 +57,18 @@ export const AuthProvider = ({ children }) => {
         setReviews([])
         setFavorites([])
         localStorage.removeItem('user')
-        localStorage.removeItem('token')
+        Cookies.remove('token')
     }
 
     return (
         <AuthContext.Provider
-            value={{ user, reviews, favorites, login, logout }}
+            value={{
+                user,
+                reviews,
+                favorites,
+                login,
+                logout,
+            }}
         >
             {children}
         </AuthContext.Provider>

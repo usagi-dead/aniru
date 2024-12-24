@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import usePageTransition from '../Hooks/usePageTransition'
 import { AuthContext } from '../Context/AuthContext'
 import '../Styles/Header.css'
 import Search from './Search'
@@ -8,6 +8,7 @@ const Header = () => {
     const { user } = useContext(AuthContext)
     const [animation, setAnimation] = useState(false)
     const [scrolled, setScrolled] = useState(false)
+    const { handleSwitch } = usePageTransition()
 
     setTimeout(() => {
         setAnimation(true)
@@ -33,24 +34,29 @@ const Header = () => {
         <header className={`${animation ? 'active' : ''}`}>
             <div className={`header-back ${scrolled ? 'scrolled' : ''}`}>
                 <div className="header-align container">
-                    <Link to="/">
-                        <img src="/aniru.svg" alt="aniru" className="logo" />
-                    </Link>
+                    <img
+                        src="/logo/aniru.svg"
+                        alt="aniru"
+                        className="logo"
+                        onClick={() => handleSwitch('/')}
+                    />
 
                     <Search />
 
                     {user ? (
-                        <Link to="/profile">
-                            <button className="standard-input button">
-                                Профиль
-                            </button>
-                        </Link>
+                        <button
+                            className="standard-input button"
+                            onClick={() => handleSwitch('/profile')}
+                        >
+                            Профиль
+                        </button>
                     ) : (
-                        <Link to="/login">
-                            <button className="standard-input button">
-                                Войти
-                            </button>
-                        </Link>
+                        <button
+                            className="standard-input button"
+                            onClick={() => handleSwitch('/login')}
+                        >
+                            Войти
+                        </button>
                     )}
                 </div>
             </div>

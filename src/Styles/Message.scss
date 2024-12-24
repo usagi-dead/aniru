@@ -2,41 +2,33 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
     background-color: rgba(255, 255, 255, 0.15);
     padding: 16px 64px;
     border-radius: 48px;
     user-select: none;
     font-weight: 600;
     font-size: 16px;
-    transition:
-        transform 0.6s,
-        opacity 0.6s;
-    animation: message 0.6s;
-}
-
-.message.fade-out {
     opacity: 0;
-    transform: translateX(-50%) translateY(200px);
-}
+    text-align: center;
+    width: max-content;
+    max-width: calc(100vw - 64px);
+    transform: translateX(-50%) translateY(64px);
+    transition:
+        transform 0.3s,
+        opacity 0.3s;
 
-.message.error {
-    color: #ffffff;
-    background-color: #aa0000;
-}
-
-.message.success {
-    color: #ffffff;
-    background-color: #228e01;
-}
-
-@keyframes message {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(200px);
-    }
-    to {
+    &.active {
         opacity: 1;
         transform: translateX(-50%);
+    }
+
+    &.error {
+        color: #ffffff;
+        background-color: #aa0000;
+    }
+
+    &.success {
+        color: #ffffff;
+        background-color: #228e01;
     }
 }

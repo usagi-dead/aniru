@@ -6,6 +6,20 @@ body {
     color: #fff;
     padding: 0;
     margin: 0;
+    min-height: 100vh;
+    transition:
+        transform 0.6s ease-in-out,
+        opacity 0.6s ease-in-out;
+
+    &.closing {
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+
+    &.scroll {
+        transition: transform 0s;
+        transform: translateY(200px);
+    }
 }
 
 .button {

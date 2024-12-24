@@ -184,7 +184,7 @@ app.post('/api/register', (req, res) => {
     const { username, password } = req.body
 
     if (!username || !password) {
-        return res.status(400).json({ error: 'Все поля обязательны.' })
+        return res.status(400).json({ error: 'Все поля обязательны' })
     }
 
     const hash = bcrypt.hashSync(password, 10)
@@ -195,11 +195,11 @@ app.post('/api/register', (req, res) => {
             if (err.message.includes('UNIQUE constraint')) {
                 return res
                     .status(400)
-                    .json({ error: 'Пользователь уже существует.' })
+                    .json({ error: 'Пользователь уже существует' })
             }
             return res.status(500).json({ error: err.message })
         }
-        res.status(201).json({ message: 'Пользователь зарегистрирован.' })
+        res.status(201).json({ message: 'Пользователь зарегистрирован' })
     })
 })
 
@@ -208,38 +208,49 @@ app.post('/api/login', (req, res) => {
     const { username, password } = req.body
 
     if (!username || !password) {
-        return res.status(400).json({ error: 'Все поля обязательны.' })
+        return res.status(400).json({ error: 'Все поля обязательны' })
     }
 
-    const query = 'SELECT id, password_hash FROM Users WHERE username = ?'
+    const query =
+        'SELECT id, username, password_hash, avatar, description FROM Users WHERE username = ?'
     db.get(query, [username], (err, user) => {
         if (err) {
             return res.status(500).json({ error: err.message })
         }
         if (!user) {
-            return res.status(401).json({ error: 'Неверный логин или пароль.' })
+            return res.status(401).json({ error: 'Пользователь не существует' })
         }
 
         const isValid = bcrypt.compareSync(password, user.password_hash)
         if (!isValid) {
-            return res.status(401).json({ error: 'Неверный логин или пароль.' })
+            return res.status(401).json({ error: 'Неверный пароль' })
         }
 
         const token = jwt.sign({ id: user.id, username }, secretKey, {
             expiresIn: '1h',
         })
-        res.json({ token, user: { id: user.id, username } })
+
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                username,
+                avatar: user.avatar,
+                description: user.description,
+            },
+            message: 'Вход выполнен успешно',
+        })
     })
 })
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization
-    if (!authHeader) return res.status(401).json({ error: 'Не авторизован.' })
+    if (!authHeader) return res.status(401).json({ error: 'Не авторизован' })
 
     const token = authHeader.split(' ')[1]
     jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) return res.status(403).json({ error: 'Неверный токен.' })
-        req.user = decoded // Декодированные данные токена
+        if (err) return res.status(403).json({ error: 'Неверный токен' })
+        req.user = decoded
         next()
     })
 }
@@ -309,12 +320,31 @@ app.post('/api/favorites', (req, res) => {
             .json({ error: 'Поля user_id и anime_id обязательны.' })
     }
 
-    const query = 'INSERT INTO UserFavorites (user_id, anime_id) VALUES (?, ?)'
+    const query = `
+        INSERT INTO UserFavorites (user_id, anime_id, added_at) 
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+    `
     db.run(query, [user_id, anime_id], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message })
         }
         res.status(201).json({ message: 'Аниме добавлено в избранное.' })
+    })
+})
+
+app.get('/api/user/:userId', (req, res) => {
+    const query =
+        'SELECT id, username, avatar, description FROM Users WHERE id = ?'
+    const params = [req.params.userId]
+    db.get(query, params, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        if (!row) {
+            return res.status(404).json({ error: 'Пользователь не найден.' })
+        }
+
+        res.json(row)
     })
 })
 
@@ -339,16 +369,39 @@ app.get('/api/user/:userId/reviews', verifyToken, (req, res) => {
 // Получение списка избранных аниме пользователя
 app.get('/api/user/:userId/favorites', verifyToken, (req, res) => {
     const query = `
-        SELECT a.id, a.title, a.image_url
+        SELECT 
+            a.id, 
+            a.title, 
+            a.description, 
+            a.release_year, 
+            a.image_url,
+            GROUP_CONCAT(g.name, ', ') AS genres,
+            COALESCE(ROUND(AVG(r.rating), 1), 0) AS average_rating,
+            uf.added_at
         FROM UserFavorites uf
         JOIN Anime a ON uf.anime_id = a.id
+        LEFT JOIN AnimeGenres ag ON a.id = ag.anime_id
+        LEFT JOIN Genres g ON ag.genre_id = g.id
+        LEFT JOIN AnimeReviews r ON a.id = r.anime_id
         WHERE uf.user_id = ?
+        GROUP BY a.id
+        ORDER BY uf.added_at DESC
     `
     const params = [req.params.userId]
+
     db.all(query, params, (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message })
         }
+
+        rows.forEach((row) => {
+            if (row.genres) {
+                const genresArray = row.genres.split(', ')
+                const uniqueGenres = Array.from(new Set(genresArray))
+                row.genres = uniqueGenres.join(', ')
+            }
+        })
+
         res.json(rows)
     })
 })

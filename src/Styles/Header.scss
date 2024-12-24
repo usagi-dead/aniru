@@ -1,10 +1,5 @@
 @import 'Variables';
 
-header.active {
-    transform: translateY(0);
-    opacity: 1;
-}
-
 header {
     position: sticky;
     top: 0;
@@ -14,6 +9,11 @@ header {
     transition:
         transform 0.6s ease-in-out,
         opacity 0.6s ease-in-out;
+
+    &.active {
+        transform: translateY(0);
+        opacity: 1;
+    }
 
     .header-back {
         padding: 16px 0;

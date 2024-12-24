@@ -1,32 +1,34 @@
-.auth-container.closing {
-  opacity: 0;
-  transform: translate(-50%, -50%) translateY(500px);
-}
-
 .auth-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  height: 100%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  width: 400px;
+  justify-content: center;
   max-width: calc(100% - 64px);
-  gap: 32px;
   opacity: 1;
   transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
-  animation: fadeIn 0.6s ease-in-out;
 }
-.auth-container .logo {
+.auth-container form {
+  width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  gap: 32px;
+}
+.auth-container form .logo {
   width: 220px;
   max-width: 100%;
   cursor: pointer;
 }
-.auth-container .move-button,
-.auth-container button,
-.auth-container input {
+.auth-container form .move-button,
+.auth-container form button,
+.auth-container form input {
   font-family: "Montserrat", serif;
   font-weight: 700;
   font-size: 16px;
@@ -37,31 +39,20 @@
   border: none;
   transition: color 0.3s, background-color 0.3s;
 }
-.auth-container input {
+.auth-container form input {
   background: transparent;
   color: white;
   outline: rgba(238, 238, 238, 0.4) solid 2px;
 }
-.auth-container .move-button {
+.auth-container form .move-button {
   background-color: rgba(238, 238, 238, 0.15);
   color: white;
 }
-.auth-container .move-button:hover {
+.auth-container form .move-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
-.auth-container button {
+.auth-container form button {
   cursor: pointer;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) translateY(-500px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
 }
 
 /*# sourceMappingURL=Auth.css.map */

@@ -96,7 +96,11 @@ const Search = () => {
                         autoCorrect="off"
                         spellCheck="false"
                     />
-                    <img src="/search.svg" alt="🔍" className="search-icon" />
+                    <img
+                        src="/media/search.svg"
+                        alt="🔍"
+                        className="search-icon"
+                    />
                 </form>
             </search>
 

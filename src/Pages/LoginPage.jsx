@@ -1,45 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../Context/AuthContext'
+import usePageTransition from '../Hooks/usePageTransition'
 import Message from '../Components/Message'
 import '../Styles/Auth.css'
 
 export default function LoginPage() {
-    const [isClosing, setIsClosing] = useState(false)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
-    const [errorCheck, setErrorCheck] = useState(true)
-    const [messageCheck, setMessageCheck] = useState(true)
-    const navigate = useNavigate()
+    const [errorCheck, setErrorCheck] = useState(false)
+    const [messageCheck, setMessageCheck] = useState(false)
     const { login } = useContext(AuthContext)
+    const { handleSwitch } = usePageTransition()
 
     useEffect(() => {
         document.body.style.overflow = 'hidden'
     }, [])
 
-    const handleSwitch = (url) => {
-        setIsClosing(true)
-        setErrorCheck(false)
-        setTimeout(() => {
-            navigate(url)
-        }, 600)
-    }
-
     const validateForm = () => {
         if (password.length < 6) {
-            setError('Пароль должен содержать минимум 6 символов.')
+            setError('Пароль должен содержать минимум 6 символов')
+            setErrorCheck(true)
             return false
         } else {
-            setError('')
             return true
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setErrorCheck(true)
 
         if (!validateForm()) return
 
@@ -51,18 +41,16 @@ export default function LoginPage() {
 
         if (response.ok) {
             const data = await response.json()
-            setSuccess('Авторизация прошла успешно!')
+            setSuccess(data.message)
+            setMessageCheck(true)
             setTimeout(() => {
                 login(data)
-                setIsClosing(true)
-                setMessageCheck(false)
-                setTimeout(() => {
-                    navigate('/profile')
-                }, 600)
+                handleSwitch('/profile')
             }, 1200)
         } else {
             const data = await response.json()
-            setError(data.error || 'Неверный логин или пароль.')
+            setErrorCheck(true)
+            setError(data.error)
         }
     }
 
@@ -72,19 +60,13 @@ export default function LoginPage() {
         if (name === 'password') setPassword(value)
 
         setErrorCheck(false)
-        setTimeout(() => {
-            setErrorCheck(true)
-        }, 600)
     }
 
     return (
-        <section>
-            <form
-                onSubmit={handleSubmit}
-                className={`auth-container ${isClosing ? 'closing' : ''}`}
-            >
+        <section className={`auth-container`}>
+            <form onSubmit={handleSubmit}>
                 <img
-                    src="/aniru.svg"
+                    src="/logo/aniru.svg"
                     alt="aniru"
                     className="logo"
                     onClick={() => handleSwitch('/')}
@@ -108,7 +90,7 @@ export default function LoginPage() {
                 <button type="submit">Войти</button>
                 <button
                     type="button"
-                    onClick={() => handleSwitch('/register')}
+                    onClick={() => handleSwitch('/register', true)}
                     className="move-button"
                 >
                     Создать аккаунт

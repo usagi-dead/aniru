@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import usePageTransition from '../Hooks/usePageTransition'
 import Message from '../Components/Message'
 import '../Styles/Auth.css'
 
@@ -7,12 +7,11 @@ export default function RegisterPage() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [isClosing, setIsClosing] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
-    const [errorCheck, setErrorCheck] = useState(true)
-    const [messageCheck, setMessageCheck] = useState(true)
-    const navigate = useNavigate()
+    const [errorCheck, setErrorCheck] = useState(false)
+    const [messageCheck, setMessageCheck] = useState(false)
+    const { handleSwitch } = usePageTransition()
 
     useEffect(() => {
         document.body.style.overflow = 'hidden'
@@ -22,30 +21,22 @@ export default function RegisterPage() {
         setError(msg)
     }
 
-    const handleSwitch = (url) => {
-        setIsClosing(true)
-        setErrorCheck(false)
-        setTimeout(() => {
-            navigate(url)
-        }, 600)
-    }
-
     const validateForm = () => {
         if (password.length < 6) {
-            handleSetError('Пароль должен содержать минимум 6 символов.')
+            handleSetError('Пароль должен содержать минимум 6 символов')
+            setErrorCheck(true)
             return false
         } else if (password !== confirmPassword) {
-            handleSetError('Пароли не совпадают.')
+            handleSetError('Пароли не совпадают')
+            setErrorCheck(true)
             return false
         } else {
-            setError('')
             return true
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setErrorCheck(true)
 
         if (!validateForm()) return
 
@@ -56,17 +47,15 @@ export default function RegisterPage() {
         })
 
         if (response.ok) {
-            setSuccess('Регистрация прошла успешно!')
+            const data = await response.json()
+            setSuccess(data.message)
+            setMessageCheck(true)
             setTimeout(() => {
-                setIsClosing(true)
-                setMessageCheck(false)
-                setTimeout(() => {
-                    navigate('/login')
-                }, 600)
+                handleSwitch('/login')
             }, 1200)
         } else {
             const data = await response.json()
-            handleSetError(data.error || 'Ошибка регистрации.')
+            handleSetError(data.error || 'Ошибка регистрации')
         }
     }
 
@@ -77,19 +66,13 @@ export default function RegisterPage() {
         if (name === 'confirmPassword') setConfirmPassword(value)
 
         setErrorCheck(false)
-        setTimeout(() => {
-            setErrorCheck(true)
-        }, 600)
     }
 
     return (
-        <section>
-            <form
-                className={`auth-container ${isClosing ? 'closing' : ''}`}
-                onSubmit={handleSubmit}
-            >
+        <section className={`auth-container`}>
+            <form onSubmit={handleSubmit}>
                 <img
-                    src="/aniru.svg"
+                    src="/logo/aniru.svg"
                     alt="aniru"
                     className="logo"
                     onClick={() => handleSwitch('/')}
@@ -126,7 +109,7 @@ export default function RegisterPage() {
 
                 <button
                     type="button"
-                    onClick={() => handleSwitch('/login')}
+                    onClick={() => handleSwitch('/login', true)}
                     className="move-button"
                 >
                     Войти
