@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import '../Styles/Search.css'
 import AnimeRating from './AnimeRating.jsx'
 import axios from 'axios'
+import usePageTransition from '../Hooks/usePageTransition'
 
 const Search = () => {
     const [isActive, setIsActive] = useState(false)
     const [query, setQuery] = useState('')
     const [results, setResults] = useState([])
     const [loading, setLoading] = useState(false)
+    const { handleSwitch } = usePageTransition()
 
     const handleBlur = () => {
         setIsActive(false)
@@ -113,7 +115,16 @@ const Search = () => {
                         <div className="comment">Ничего не найдено</div>
                     )}
                     {results.map((result) => (
-                        <div key={result.id} className="search-card">
+                        <div
+                            key={result.id}
+                            className="search-card"
+                            onClick={() => {
+                                setIsActive(false)
+                                setQuery('')
+                                setResults([])
+                                handleSwitch(`/anime/${result.id}`)
+                            }}
+                        >
                             <AnimeRating rating={result.average_rating} />
 
                             <img

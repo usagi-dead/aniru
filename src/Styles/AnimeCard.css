@@ -10,6 +10,11 @@
   transition: opacity 0.9s, scale 0.9s, transform 0.9s;
   flex: 1;
 }
+.anime-wrapper.visible {
+  opacity: 1;
+  scale: 1;
+  transform: translateY(0);
+}
 .anime-wrapper .anime-poster,
 .anime-wrapper .anime-blurred {
   position: absolute;
@@ -26,17 +31,9 @@
   width: 100%;
   transition: opacity 0.3s;
 }
-
-.anime-wrapper.visible {
-  opacity: 1;
-  scale: 1;
-  transform: translateY(0);
-}
-
 .anime-wrapper.faster {
   transition: opacity 0.3s, scale 0.3s ease, transform 0.3s ease;
 }
-
 .anime-wrapper:hover {
   scale: 1.05;
   z-index: 2;

@@ -1,0 +1,184 @@
+.anime-container {
+    margin: 0 auto 32px auto;
+    background-color: rgba(238, 238, 238, 0.15);
+    border-radius: 64px;
+
+    .margin-container {
+        width: calc(100% - 64px);
+        padding: 32px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        .anime-rating {
+            scale: 1.5;
+            top: 48px;
+            right: 62px;
+        }
+
+        .top-container {
+            display: flex;
+            gap: 32px;
+            max-height: 500px;
+
+            .anime-poster {
+                width: 380px;
+                min-width: 380px;
+                height: 500px;
+                position: relative;
+
+                .blurred,
+                .main {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                    border-radius: 32px;
+                }
+
+                .blurred {
+                    filter: blur(20px);
+                    position: absolute;
+                }
+
+                .main {
+                    position: relative;
+                }
+
+                .anime-poster,
+                .anime-blurred {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    z-index: -1;
+                }
+            }
+
+            .anime-info {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 24px;
+                max-width: 60%;
+                height: 500px;
+
+                p {
+                    margin: 0;
+                    font-size: 20px;
+                }
+
+                .anime-logo {
+                    max-height: 180px;
+                    width: min-content;
+                    object-fit: contain;
+                }
+
+                .favorite-button {
+                    width: fit-content;
+                }
+            }
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 40px;
+        }
+
+        .reviews-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .review-container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .top {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                .date {
+                    color: rgba(255, 255, 255, 0.3);
+                }
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                margin: 0;
+            }
+
+            li {
+                display: flex;
+                gap: 16px;
+                background-color: rgba(30, 30, 30, 0.6);
+                padding: 16px;
+                border-radius: 32px;
+                position: relative;
+
+                .anime-rating {
+                    scale: 1;
+                    top: 16px;
+                    right: 16px;
+                }
+            }
+
+            p, h3 {
+                margin: 0;
+            }
+
+            h3 {
+                font-size: 32px;
+            }
+
+            .image-container {
+                position: relative;
+                min-width: 128px;
+                height: 128px;
+
+                .profile-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 16px;
+
+                    &.blurred {
+                        position: absolute;
+                        filter: blur(10px);
+                    }
+
+                    &.main {
+                        position: relative;
+                    }
+                }
+            }
+        }
+
+        .review-form {
+            background-color: rgba(30, 30, 30, 0.6);
+            border-radius: 32px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .add-item {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                label {
+                    font-size: 16px;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}

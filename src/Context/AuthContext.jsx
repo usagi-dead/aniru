@@ -86,15 +86,63 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const addFavorite = async (animeId) => {
+        const token = Cookies.get('token')
+        if (!token) {
+            console.error('Нет токена для добавления в избранное')
+            return
+        }
+
+        try {
+            const response = await axios.post(
+                `http://localhost:5000/api/user/${user.id}/favorites/${animeId}`,
+                {},
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            setFavorites((prevFavorites) => [...prevFavorites, { id: animeId }])
+            console.log(response.data.message)
+        } catch (error) {
+            console.error(
+                'Ошибка при добавлении в избранное:',
+                error.response?.data || error.message
+            )
+        }
+    }
+
+    const removeFavorite = async (animeId) => {
+        const token = Cookies.get('token')
+        if (!token) {
+            console.error('Нет токена для удаления из избранного')
+            return
+        }
+
+        try {
+            const response = await axios.delete(
+                `http://localhost:5000/api/user/${user.id}/favorites/${animeId}`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            setFavorites((prevFavorites) =>
+                prevFavorites.filter((favorite) => favorite.id !== animeId)
+            )
+            console.log(response.data.message)
+        } catch (error) {
+            console.error('Ошибка при удалении из избранного:', error)
+        }
+    }
+
     return (
         <AuthContext.Provider
             value={{
                 user,
                 reviews,
                 favorites,
+                setReviews,
+                setFavorites, // Добавьте setFavorites сюда
                 login,
                 logout,
                 updateUserData,
+                addFavorite,
+                removeFavorite,
             }}
         >
             {children}

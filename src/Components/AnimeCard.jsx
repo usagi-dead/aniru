@@ -1,20 +1,24 @@
 import React, { useState } from 'react'
 import { useInView } from 'react-intersection-observer'
-import '../Styles/HomePage/AnimeCard.css'
+import '../Styles/AnimeCard.css'
 import AnimeRating from './AnimeRating.jsx'
+import usePageTransition from '../Hooks/usePageTransition'
 
 export default function AnimeCard({ anime }) {
     const [fasterTransition, setFasterTransition] = useState(false)
     const { ref, inView } = useInView({
         threshold: 0.1,
-        triggerOnce: true,
     })
+    const { handleSwitch } = usePageTransition()
 
-    if (inView) {
-        setTimeout(() => {
-            setFasterTransition(true)
-        }, 900)
-    }
+    React.useEffect(() => {
+        if (inView) {
+            const timer = setTimeout(() => {
+                setFasterTransition(true)
+            }, 900)
+            return () => clearTimeout(timer)
+        }
+    }, [inView])
 
     return (
         <div
@@ -22,6 +26,7 @@ export default function AnimeCard({ anime }) {
                 ${inView ? 'visible' : ''} 
                 ${fasterTransition ? 'faster' : ''}`}
             ref={ref}
+            onClick={() => handleSwitch(`/anime/${anime.id}`)}
         >
             <img
                 src={'/posters/' + anime.image_url + '.jpg'}

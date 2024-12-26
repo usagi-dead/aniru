@@ -8,9 +8,11 @@ const usePageTransition = () => {
 
     const handleSwitch = (url, scroll = false) => {
         setIsClosing(true)
+
         setTimeout(() => {
             if (scroll) setIsScrolling(true)
         }, 600)
+
         setTimeout(() => {
             setIsClosing(false)
             setIsScrolling(false)

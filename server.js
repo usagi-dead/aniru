@@ -29,7 +29,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 app.use(
     cors({
         origin: 'http://localhost:5173',
-        methods: ['GET', 'POST', 'PUT'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
     })
 )
@@ -203,7 +203,7 @@ app.post('/api/review', (req, res) => {
 // Получение всех отзывов для конкретного аниме
 app.get('/api/anime/:id/reviews', (req, res) => {
     const query = `
-        SELECT r.rating, r.review, u.username, r.created_at
+        SELECT r.rating, r.review, u.username, u.avatar, r.created_at
         FROM AnimeReviews r
         JOIN Users u ON r.user_id = u.id
         WHERE r.anime_id = ?
@@ -232,28 +232,6 @@ app.get('/api/anime/:id/average-rating', (req, res) => {
         }
         const averageRating = row.average_rating || 0
         res.json({ average_rating: averageRating })
-    })
-})
-
-// Добавление аниме в избранное
-app.post('/api/favorites', (req, res) => {
-    const { user_id, anime_id } = req.body
-
-    if (!user_id || !anime_id) {
-        return res
-            .status(400)
-            .json({ error: 'Поля user_id и anime_id обязательны.' })
-    }
-
-    const query = `
-        INSERT INTO UserFavorites (user_id, anime_id, added_at) 
-        VALUES (?, ?, CURRENT_TIMESTAMP)
-    `
-    db.run(query, [user_id, anime_id], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message })
-        }
-        res.status(201).json({ message: 'Аниме добавлено в избранное.' })
     })
 })
 
@@ -469,6 +447,50 @@ app.post('/api/upload-avatar', upload.single('avatar'), (req, res) => {
         return res.status(400).json({ error: 'Файл не загружен' })
     }
     res.json({ filePath: req.file.filename }) // Возвращаем путь файла
+})
+
+// Добавление аниме в избранное
+app.post('/api/user/:userId/favorites/:animeId', verifyToken, (req, res) => {
+    const { userId, animeId } = req.params // Используем userId и animeId, как в маршруте
+
+    if (!userId || !animeId) {
+        return res
+            .status(400)
+            .json({ error: 'Поля userId и animeId обязательны.' }) // Проверка на обязательность полей
+    }
+
+    const query = `
+        INSERT INTO UserFavorites (user_id, anime_id, added_at) 
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+    `
+    db.run(query, [userId, animeId], function (err) {
+        // Используем правильные переменные
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        res.status(201).json({ message: 'Аниме добавлено в избранное.' })
+    })
+})
+
+// Удаление аниме из избранного
+app.delete('/api/user/:userId/favorites/:animeId', verifyToken, (req, res) => {
+    const { userId, animeId } = req.params // Используем userId и animeId
+
+    const query = `
+        DELETE FROM UserFavorites
+        WHERE user_id = ? AND anime_id = ?
+    `
+    const params = [userId, animeId] // Передаем правильные параметры
+
+    db.run(query, params, function (err) {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Избранное не найдено.' })
+        }
+        res.json({ message: 'Аниме удалено из избранного.' })
+    })
 })
 
 // Запуск сервера

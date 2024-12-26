@@ -70,12 +70,6 @@
   align-items: center;
   justify-content: center;
 }
-.profile-container .left-container .text-container .block .textarea {
-  resize: none;
-  height: 64px;
-  border-radius: 24px;
-  padding: 8px;
-}
 .profile-container .left-container .text-container h3 {
   margin: 0;
   font-size: 20px;
@@ -94,6 +88,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  flex: 2;
 }
 .profile-container .right-container h2 {
   margin: 0;
@@ -113,6 +108,39 @@
 .profile-container .right-container .favorites-container .cards-container {
   display: flex;
   gap: 32px;
+}
+.profile-container .right-container .favorites-container .pagination-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button[disabled] {
+  opacity: 0.3;
+  cursor: auto;
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button:hover:not([disabled]) {
+  background-color: rgb(238, 238, 238);
+  color: black;
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button:hover:not([disabled]) img {
+  filter: invert(1);
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button .left, .profile-container .right-container .favorites-container .pagination-buttons .pagination-button .right {
+  width: 16px;
+  transition: filter 0.3s;
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button .left {
+  transform: rotate(90deg);
+}
+.profile-container .right-container .favorites-container .pagination-buttons .pagination-button .right {
+  transform: rotate(270deg);
 }
 .profile-container .right-container .favorites-container .anime-wrapper {
   min-width: 220px;

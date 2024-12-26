@@ -2,14 +2,15 @@ import React, { useContext, useState } from 'react'
 import { AuthContext } from '../Context/AuthContext'
 import '../Styles/ProfilePage/ProfilePage.css'
 import AnimeCard from '../Components/AnimeCard.jsx'
-import usePageTransition from '../Hooks/usePageTransition'
 import axios from 'axios'
+import usePageTransition from '../Hooks/usePageTransition'
+
+const ITEMS_PER_PAGE = 4
 
 const ProfilePage = () => {
+    const { handleSwitch } = usePageTransition()
     const { user, reviews, favorites, logout, updateUserData } =
         useContext(AuthContext)
-    const { handleSwitch } = usePageTransition()
-
     const [isEditing, setIsEditing] = useState(false)
     const [updatedUser, setUpdatedUser] = useState({
         username: user?.username || '',
@@ -17,6 +18,8 @@ const ProfilePage = () => {
     })
     const [avatar, setAvatar] = useState(null)
     const [avatarPreview, setAvatarPreview] = useState(null)
+    const [currentPage, setCurrentPage] = useState(0)
+    const [isAnimating, setIsAnimating] = useState(false)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -36,7 +39,7 @@ const ProfilePage = () => {
             username: user.username || '',
             description: user.description || '',
         })
-        setAvatarPreview(null) // Убираем превью при переходе в режим редактирования
+        setAvatarPreview(null)
         setIsEditing(true)
     }
 
@@ -66,6 +69,26 @@ const ProfilePage = () => {
             console.error('Ошибка при сохранении изменений:', error)
         }
     }
+
+    const paginate = (direction) => {
+        if (isAnimating) return
+
+        const maxPages = Math.ceil(favorites.length / ITEMS_PER_PAGE)
+        setIsAnimating(true)
+
+        setTimeout(() => {
+            setCurrentPage((prev) => {
+                const nextPage = direction === 'next' ? prev + 1 : prev - 1
+                return Math.max(0, Math.min(maxPages - 1, nextPage))
+            })
+            setIsAnimating(false)
+        }, 300) // Длительность анимации (300ms)
+    }
+
+    const visibleItems = favorites.slice(
+        currentPage * ITEMS_PER_PAGE,
+        (currentPage + 1) * ITEMS_PER_PAGE
+    )
 
     if (!user) return <div></div>
 
@@ -187,7 +210,7 @@ const ProfilePage = () => {
                                                 handleSwitch('/')
                                                 setTimeout(() => {
                                                     logout()
-                                                }, 600)
+                                                }, 800)
                                             }
                                         }}
                                     >
@@ -209,11 +232,47 @@ const ProfilePage = () => {
                         <h2>
                             <span className="blue">*</span> Избранное аниме
                         </h2>
-                        <div className="cards-container">
-                            {favorites.map((item, key) => (
-                                <AnimeCard key={key} anime={item}></AnimeCard>
+
+                        <div
+                            className={`cards-container ${isAnimating ? 'animating' : ''}`}
+                        >
+                            {visibleItems.map((item) => (
+                                <AnimeCard
+                                    key={`${item.id}-${currentPage}`}
+                                    anime={item}
+                                />
                             ))}
                         </div>
+
+                        {favorites.length > ITEMS_PER_PAGE && (
+                            <div className="pagination-buttons">
+                                <button
+                                    disabled={currentPage === 0}
+                                    onClick={() => paginate('prev')}
+                                    className="standard-input pagination-button"
+                                >
+                                    <img
+                                        src="/media/arrow.svg"
+                                        alt="◀"
+                                        className="left"
+                                    />
+                                </button>
+                                <button
+                                    disabled={
+                                        (currentPage + 1) * ITEMS_PER_PAGE >=
+                                        favorites.length
+                                    }
+                                    onClick={() => paginate('next')}
+                                    className="standard-input pagination-button"
+                                >
+                                    <img
+                                        src="/media/arrow.svg"
+                                        alt="▶"
+                                        className="right"
+                                    />
+                                </button>
+                            </div>
+                        )}
                     </section>
 
                     <section>
@@ -224,8 +283,13 @@ const ProfilePage = () => {
                             <ul>
                                 {reviews.map((review, index) => (
                                     <li key={index}>
-                                        <strong>{review.anime_title}:</strong>{' '}
-                                        {review.rating} - {review.review}
+                                        <strong>
+                                            {review.anime_title ||
+                                                'Название недоступно'}
+                                            :
+                                        </strong>{' '}
+                                        {review.rating} -{' '}
+                                        {review.review || 'Отзыв отсутствует'}
                                     </li>
                                 ))}
                             </ul>

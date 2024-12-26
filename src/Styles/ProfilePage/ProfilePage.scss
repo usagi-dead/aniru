@@ -78,13 +78,6 @@
                     align-items: center;
                     justify-content: center;
                 }
-
-                .textarea {
-                    resize: none;
-                    height: 64px;
-                    border-radius: 24px;
-                    padding: 8px;
-                }
             }
 
             h3 {
@@ -110,6 +103,7 @@
         display: flex;
         flex-direction: column;
         gap: 32px;
+        flex: 2;
 
         h2 {
             margin: 0;
@@ -132,6 +126,47 @@
             .cards-container {
                 display: flex;
                 gap: 32px;
+            }
+
+            .pagination-buttons {
+                display: flex;
+                justify-content: space-between;
+
+                .pagination-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 64px;
+                    width: 64px;
+                    border-radius: 50%;
+
+                    &[disabled] {
+                        opacity: 0.3;
+                        cursor: auto;
+                    }
+
+                    &:hover:not([disabled]) {
+                        background-color: rgba(238, 238, 238, 1);
+                        color: black;
+
+                        img {
+                            filter: invert(1);
+                        }
+                    }
+
+                    .left, .right {
+                        width: 16px;
+                        transition: filter 0.3s;
+                    }
+
+                    .left {
+                        transform: rotate(90deg);
+                    }
+
+                    .right {
+                        transform: rotate(270deg);
+                    }
+                }
             }
 
             .anime-wrapper {
