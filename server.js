@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import cors from 'cors'
+import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -28,7 +29,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 app.use(
     cors({
         origin: 'http://localhost:5173',
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST', 'PUT'],
         credentials: true,
     })
 )
@@ -179,82 +180,6 @@ app.get('/api/search', (req, res) => {
     })
 })
 
-// Регистрация
-app.post('/api/register', (req, res) => {
-    const { username, password } = req.body
-
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Все поля обязательны' })
-    }
-
-    const hash = bcrypt.hashSync(password, 10)
-    const query = 'INSERT INTO Users (username, password_hash) VALUES (?, ?)'
-
-    db.run(query, [username, hash], function (err) {
-        if (err) {
-            if (err.message.includes('UNIQUE constraint')) {
-                return res
-                    .status(400)
-                    .json({ error: 'Пользователь уже существует' })
-            }
-            return res.status(500).json({ error: err.message })
-        }
-        res.status(201).json({ message: 'Пользователь зарегистрирован' })
-    })
-})
-
-// Авторизация
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body
-
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Все поля обязательны' })
-    }
-
-    const query =
-        'SELECT id, username, password_hash, avatar, description FROM Users WHERE username = ?'
-    db.get(query, [username], (err, user) => {
-        if (err) {
-            return res.status(500).json({ error: err.message })
-        }
-        if (!user) {
-            return res.status(401).json({ error: 'Пользователь не существует' })
-        }
-
-        const isValid = bcrypt.compareSync(password, user.password_hash)
-        if (!isValid) {
-            return res.status(401).json({ error: 'Неверный пароль' })
-        }
-
-        const token = jwt.sign({ id: user.id, username }, secretKey, {
-            expiresIn: '1h',
-        })
-
-        res.json({
-            token,
-            user: {
-                id: user.id,
-                username,
-                avatar: user.avatar,
-                description: user.description,
-            },
-            message: 'Вход выполнен успешно',
-        })
-    })
-})
-
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization
-    if (!authHeader) return res.status(401).json({ error: 'Не авторизован' })
-
-    const token = authHeader.split(' ')[1]
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) return res.status(403).json({ error: 'Неверный токен' })
-        req.user = decoded
-        next()
-    })
-}
-
 // Добавление отзыва и рейтинга для аниме
 app.post('/api/review', (req, res) => {
     const { user_id, anime_id, rating, review } = req.body
@@ -332,6 +257,82 @@ app.post('/api/favorites', (req, res) => {
     })
 })
 
+// Регистрация
+app.post('/api/register', (req, res) => {
+    const { username, password } = req.body
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Все поля обязательны' })
+    }
+
+    const hash = bcrypt.hashSync(password, 10)
+    const query = 'INSERT INTO Users (username, password_hash) VALUES (?, ?)'
+
+    db.run(query, [username, hash], function (err) {
+        if (err) {
+            if (err.message.includes('UNIQUE constraint')) {
+                return res
+                    .status(400)
+                    .json({ error: 'Пользователь уже существует' })
+            }
+            return res.status(500).json({ error: err.message })
+        }
+        res.status(201).json({ message: 'Пользователь зарегистрирован' })
+    })
+})
+
+// Авторизация
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body
+
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Все поля обязательны' })
+    }
+
+    const query =
+        'SELECT id, username, password_hash, avatar, description FROM Users WHERE username = ?'
+    db.get(query, [username], (err, user) => {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        if (!user) {
+            return res.status(401).json({ error: 'Пользователь не существует' })
+        }
+
+        const isValid = bcrypt.compareSync(password, user.password_hash)
+        if (!isValid) {
+            return res.status(401).json({ error: 'Неверный пароль' })
+        }
+
+        const token = jwt.sign({ id: user.id, username }, secretKey, {
+            expiresIn: '1h',
+        })
+
+        res.json({
+            token,
+            user: {
+                id: user.id,
+                username,
+                avatar: user.avatar,
+                description: user.description,
+            },
+            message: 'Вход выполнен успешно',
+        })
+    })
+})
+
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers.authorization
+    if (!authHeader) return res.status(401).json({ error: 'Не авторизован' })
+
+    const token = authHeader.split(' ')[1]
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) return res.status(403).json({ error: 'Неверный токен' })
+        req.user = decoded
+        next()
+    })
+}
+
 app.get('/api/user/:userId', (req, res) => {
     const query =
         'SELECT id, username, avatar, description FROM Users WHERE id = ?'
@@ -404,6 +405,70 @@ app.get('/api/user/:userId/favorites', verifyToken, (req, res) => {
 
         res.json(rows)
     })
+})
+
+// Маршрут для изменения данных пользователя
+app.put('/api/user/:userId', verifyToken, (req, res) => {
+    const { userId } = req.params
+    const { username, description, avatar } = req.body
+
+    if (req.user.id !== parseInt(userId, 10)) {
+        return res.status(403).json({ error: 'Нет прав для изменения данных' })
+    }
+
+    if (!username && !description && !avatar) {
+        return res.status(400).json({ error: 'Нет данных для обновления' })
+    }
+
+    const fields = []
+    const params = []
+
+    if (username) {
+        fields.push('username = ?')
+        params.push(username)
+    }
+    if (description) {
+        fields.push('description = ?')
+        params.push(description)
+    }
+    if (avatar) {
+        fields.push('avatar = ?')
+        params.push(avatar)
+    }
+
+    const query = `UPDATE Users SET ${fields.join(', ')} WHERE id = ?`
+    params.push(userId)
+
+    db.run(query, params, function (err) {
+        if (err) {
+            return res.status(500).json({ error: err.message })
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Пользователь не найден' })
+        }
+
+        res.json({ message: 'Данные пользователя успешно обновлены' })
+    })
+})
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/avatars/')
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+        cb(null, uniqueSuffix + path.extname(file.originalname))
+    },
+})
+
+const upload = multer({ storage })
+
+// Маршрут для загрузки аватарки
+app.post('/api/upload-avatar', upload.single('avatar'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'Файл не загружен' })
+    }
+    res.json({ filePath: req.file.filename }) // Возвращаем путь файла
 })
 
 // Запуск сервера
