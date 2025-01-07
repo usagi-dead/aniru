@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const animeRoutes = require('./routes/anime')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/users')
+const adminRoutes = require('./routes/admin')
 
 const app = express()
 
@@ -65,14 +66,15 @@ app.get('/', (req, res) => {
 app.use('/api/anime', animeRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/admin', adminRoutes)
 
 // Обработка неизвестных маршрутов
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).json({ error: 'Route not found' })
 })
 
 // Обработка ошибок
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     console.error(err.stack)
     res.status(500).json({ error: 'Internal server error' })
 })

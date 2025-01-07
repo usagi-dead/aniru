@@ -1,0 +1,155 @@
+.admin-container {
+  background-color: rgba(238, 238, 238, 0.15);
+  border-radius: 64px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto 32px auto;
+}
+.admin-container select option {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.admin-margin-container {
+  width: calc(100% - 64px);
+  height: 100%;
+  margin: 32px;
+  gap: 32px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  background-color: rgba(30, 30, 30, 0.6);
+  padding: 16px;
+  border-radius: 40px;
+  margin: 0 auto 32px auto;
+}
+.tabs button {
+  flex: 1;
+  min-width: fit-content;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.edit-buttons select {
+  padding: 0 16px;
+}
+
+.edit-container {
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.edit-container .buttons-container .button {
+  flex: 1;
+}
+
+.admin-container h1 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.admin-container section {
+  padding: 32px;
+  background-color: rgba(30, 30, 30, 0.6);
+  border-radius: 32px;
+}
+
+.admin-container h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  border-bottom: 1px solid #444;
+  padding-bottom: 16px;
+}
+
+.admin-container ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+}
+
+.admin-container ul li:not(:last-child) .line {
+  border-bottom: 1px solid #444;
+  width: calc(100% - 80px);
+  margin: 0 40px;
+}
+
+.admin-container ul li .table-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 16px 16px 32px;
+  border-radius: 40px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-container ul li .table-item:hover {
+  background-color: #333;
+}
+
+.admin-container .form-group {
+  margin-bottom: 15px;
+}
+
+.admin-container .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #b0b0b0;
+  font-size: 0.9rem;
+}
+
+.admin-container .form-group input,
+.admin-container .form-group select {
+  width: 100%;
+  max-width: 300px;
+}
+
+.admin-container .form-actions {
+  margin-top: 20px;
+}
+
+.admin-container .form-actions button {
+  margin-right: 10px;
+}
+
+.admin-container .anime-genre-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.admin-container .anime-genre-link select {
+  flex: 1;
+}
+
+.admin-container .anime-genre-list {
+  margin-top: 20px;
+}
+
+.admin-container .anime-genre-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #444;
+}
+
+.admin-container .anime-genre-list li:hover {
+  background-color: #333;
+}
+
+/*# sourceMappingURL=AdminPage.css.map */

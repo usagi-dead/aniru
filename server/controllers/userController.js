@@ -1,11 +1,10 @@
 const db = require('../utils/db')
-const multer = require('multer')
-const path = require('path')
 
 // Получение профиля пользователя
 const getUserProfile = (req, res) => {
     const userId = req.user.id
-    const query = 'SELECT username, avatar, description FROM Users WHERE id = ?'
+    const query =
+        'SELECT username, avatar, description, role FROM Users WHERE id = ?'
 
     db.get(query, [userId], (err, row) => {
         if (err) return res.status(500).json({ error: err.message })

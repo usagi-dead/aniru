@@ -22,17 +22,23 @@ const login = (req, res) => {
     const query = 'SELECT * FROM Users WHERE username = ?'
 
     db.get(query, [username], (err, user) => {
-        if (err || !user)
+        if (err || !user) {
             return res.status(401).json({ error: 'Неверные данные для входа' })
+        }
 
         const isValid = bcrypt.compareSync(password, user.password_hash)
-        if (!isValid)
+        if (!isValid) {
             return res.status(401).json({ error: 'Неверные данные для входа' })
+        }
+
+        console.log(user)
 
         const token = jwt.generateToken({
             id: user.id,
             username: user.username,
+            role: user.role,
         })
+
         res.json({ token })
     })
 }

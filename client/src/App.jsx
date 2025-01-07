@@ -1,3 +1,4 @@
+// App.jsx
 import React from 'react'
 import {
     BrowserRouter as Router,
@@ -12,6 +13,7 @@ import RegisterPage from './Pages/RegisterPage.jsx'
 import LoginPage from './Pages/LoginPage.jsx'
 import ProfilePage from './Pages/ProfilePage.jsx'
 import AnimePage from './Pages/AnimePage'
+import AdminPage from './Pages/AdminPage' // Добавляем импорт админ-панели
 import { UserProvider } from './Context/UserProvider'
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/anime/:id" element={<AnimePage />} />
+                <Route path="/admin" element={<AdminPage />} />{' '}
             </Routes>
         </UserProvider>
     )

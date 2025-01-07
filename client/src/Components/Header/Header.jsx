@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+// Header.jsx
+import React, { useEffect, useState } from 'react'
 import usePageTransition from '../../Hooks/usePageTransition.jsx'
 import { useUser } from '../../Context/UserProvider.jsx'
 import '../../Styles/Header.css'
@@ -44,12 +45,22 @@ const Header = () => {
                     <Search />
 
                     {user ? (
-                        <button
-                            className="standard-input button"
-                            onClick={() => handleSwitch('/profile')}
-                        >
-                            Профиль
-                        </button>
+                        <div className="buttons-container">
+                            {user.role === 'admin' && (
+                                <button
+                                    className="standard-input button"
+                                    onClick={() => handleSwitch('/admin')}
+                                >
+                                    Админка
+                                </button>
+                            )}
+                            <button
+                                className="standard-input button"
+                                onClick={() => handleSwitch('/profile')}
+                            >
+                                Профиль
+                            </button>
+                        </div>
                     ) : (
                         <button
                             className="standard-input button"
