@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import usePageTransition from '../Hooks/usePageTransition'
-import { AuthContext } from '../Context/AuthContext'
-import '../Styles/Header.css'
-import Search from './Search'
+import usePageTransition from '../../Hooks/usePageTransition.jsx'
+import { useUser } from '../../Context/UserProvider.jsx'
+import '../../Styles/Header.css'
+import Search from './Search.jsx'
 
 const Header = () => {
-    const { user } = useContext(AuthContext)
+    const { user } = useUser()
     const [animation, setAnimation] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const { handleSwitch } = usePageTransition()

@@ -11,7 +11,7 @@ export default function MainPoster() {
             setLoading(true)
             try {
                 const response = await fetch(
-                    'http://localhost:5000/api/anime/11'
+                    'http://localhost:3000/api/anime/11'
                 )
                 const data = await response.json()
                 setMainAnime(data)

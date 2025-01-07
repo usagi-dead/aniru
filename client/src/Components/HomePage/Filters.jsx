@@ -24,7 +24,9 @@ export default function Filters({
     useEffect(() => {
         const fetchFilters = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/genres')
+                const response = await fetch(
+                    'http://localhost:3000/api/anime/genres'
+                )
                 const data = await response.json()
                 data.sort()
                 setGenres(data)

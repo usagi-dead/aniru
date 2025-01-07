@@ -24,12 +24,15 @@
 
         .profile-image-container {
             position: relative;
+            min-width: 230px;
+            min-height: 230px;
 
             .profile-image {
-                width: 230px;
-                height: 230px;
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
                 border-radius: 32px;
+                text-align: center;
 
                 &.blurred {
                     position: absolute;
@@ -37,7 +40,7 @@
                     z-index: 1;
                 }
 
-                &.main {
+                &.main-image {
                     position: relative;
                     z-index: 2;
                 }
@@ -48,6 +51,11 @@
             margin: 8px 0 16px 0;
             font-size: 48px;
             font-weight: 900;
+            width: 100%;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .text-container {
@@ -89,6 +97,14 @@
             p {
                 margin: 0;
                 font-size: 16px;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 4;
+
+                &.none-description {
+                    opacity: 0.5;
+                }
             }
 
             .profile-buttons {
@@ -103,11 +119,16 @@
         display: flex;
         flex-direction: column;
         gap: 32px;
-        flex: 2;
+        width: calc(100% - 262px);
+
+        .none-items {
+            margin: 0;
+        }
 
         h2 {
             margin: 0;
             font-size: 32px;
+            font-weight: 800;
 
             .green {
                 color: #00aa47;
@@ -125,54 +146,84 @@
 
             .cards-container {
                 display: flex;
-                gap: 32px;
+                align-items: center;
+                overflow: hidden;
+                position: relative;
+                gap: 16px;
+                background-color: rgba(30, 30, 30, 0.6);
+                padding: 0 16px;
+                border-radius: 44px;
+                width: calc(100% - 32px);
+
+                &.none-pagination {
+                    padding: 0;
+                    border-radius: 64px;
+                    width: 100%;
+                }
+
+                .cards-wrapper {
+                    overflow: hidden;
+                    width: 100%;
+                    padding: 32px;
+                    border-radius: 64px;
+                }
+
+                .cards-slider {
+                    display: flex;
+                    gap: 32px;
+                    transition: transform 0.6s ease;
+                }
+
+                .cards-slider > * {
+                    flex: 0 0 calc(100% / 3);
+                    max-width: calc(100% / 3 - 22px);
+                }
             }
 
-            .pagination-buttons {
+            .pagination-button {
                 display: flex;
-                justify-content: space-between;
+                align-items: center;
+                justify-content: center;
+                height: calc(100% - 32px);
+                width: 64px;
+                border-radius: 32px;
 
-                .pagination-button {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 64px;
-                    width: 64px;
-                    border-radius: 50%;
+                &[disabled] {
+                    opacity: 0.3;
+                    cursor: auto;
+                }
 
-                    &[disabled] {
-                        opacity: 0.3;
-                        cursor: auto;
+                &:hover:not([disabled]) {
+                    background-color: rgba(238, 238, 238, 1);
+                    color: black;
+
+                    img {
+                        filter: invert(1);
                     }
+                }
 
-                    &:hover:not([disabled]) {
-                        background-color: rgba(238, 238, 238, 1);
-                        color: black;
+                .left, .right {
+                    width: 16px;
+                    transition: filter 0.3s;
+                }
 
-                        img {
-                            filter: invert(1);
-                        }
-                    }
+                .left {
+                    transform: rotate(90deg);
+                }
 
-                    .left, .right {
-                        width: 16px;
-                        transition: filter 0.3s;
-                    }
-
-                    .left {
-                        transform: rotate(90deg);
-                    }
-
-                    .right {
-                        transform: rotate(270deg);
-                    }
+                .right {
+                    transform: rotate(270deg);
                 }
             }
 
             .anime-wrapper {
-                min-width: 220px;
+                min-width: 200px;
                 max-width: 280px;
-                height: 360px;
+                height: 340px;
+
+                .anime-blurred {
+                    filter: blur(10px);
+                }
             }
         }
     }

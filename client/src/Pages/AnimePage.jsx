@@ -1,66 +1,45 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
-import { AuthContext } from '../context/AuthContext'
-import Cookies from 'js-cookie'
+import { useUser } from '../Context/UserProvider'
 import '../Styles/AnimePage/AnimePage.css'
 import AnimeRating from '../Components/AnimeRating.jsx'
 
 export default function AnimePage() {
     const { id } = useParams()
-    const {
-        user,
-        favorites,
-        reviews,
-        setReviews,
-        addFavorite,
-        removeFavorite,
-    } = useContext(AuthContext)
+    const { user, favorites, addToFavorites, removeFromFavorites } = useUser()
     const [anime, setAnime] = useState(null)
+    const [reviews, setReviews] = useState([])
     const [newReview, setNewReview] = useState({ rating: '', review: '' })
     const [error, setError] = useState(null)
-    const [isFavorite, setIsFavorite] = useState(false) // Локальное состояние для кнопки
+    const [review, setReview] = useState(false)
 
-    // Загружаем информацию о аниме и отзывах
+    const isFavorite = favorites.some((fav) => fav.id === parseInt(id, 10))
+
     useEffect(() => {
-        axios
-            .get(`http://localhost:5000/api/anime/${id}`)
-            .then((response) => setAnime(response.data))
+        fetch(`http://localhost:3000/api/anime/${id}`)
+            .then((response) => response.json())
+            .then((data) => setAnime(data))
             .catch((error) => console.error('Error fetching anime:', error))
 
-        axios
-            .get(`http://localhost:5000/api/anime/${id}/reviews`)
-            .then((response) => setReviews(response.data))
+        fetch(`http://localhost:3000/api/anime/${id}/reviews`)
+            .then((response) => response.json())
+            .then((data) => setReviews(data))
             .catch((error) => console.error('Error fetching reviews:', error))
+    }, [id])
 
-        // Проверяем, есть ли это аниме в избранном
-        setIsFavorite(favorites.some((fav) => fav.id === parseInt(id)))
-    }, [id, favorites, setReviews])
-
-    // Обработчик добавления/удаления из избранного
-    const toggleFavorite = async () => {
-        if (!user) {
-            console.error('Пользователь не авторизован')
-            return
-        }
-
+    const toggleFavorite = () => {
         if (isFavorite) {
-            await removeFavorite(id) // Удаляем из избранного
+            removeFromFavorites(parseInt(id, 10))
         } else {
-            await addFavorite(id) // Добавляем в избранное
+            addToFavorites(parseInt(id, 10))
         }
-
-        // Обновляем локальное состояние сразу после операции
-        setIsFavorite(!isFavorite)
     }
 
-    // Обработчик изменений формы отзыва
     const handleChange = (e) => {
         const { name, value } = e.target
         setNewReview((prev) => ({ ...prev, [name]: value }))
     }
 
-    // Обработчик отправки отзыва
     const handleSubmitReview = (e) => {
         e.preventDefault()
 
@@ -69,33 +48,51 @@ export default function AnimePage() {
             return
         }
 
-        axios
-            .post(
-                'http://localhost:5000/api/review',
-                {
-                    user_id: user.id,
-                    anime_id: id,
-                    rating: newReview.rating,
-                    review: newReview.review,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get('token')}`,
-                    },
-                }
-            )
+        fetch(`http://localhost:3000/api/anime/${id}/reviews`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+                rating: newReview.rating,
+                review: newReview.review,
+            }),
+        })
             .then(() => {
                 setNewReview({ rating: '', review: '' })
-                return axios.get(
-                    `http://localhost:5000/api/anime/${id}/reviews`
-                )
+                return fetch(`http://localhost:3000/api/anime/${id}/reviews`)
             })
-            .then((response) => setReviews(response.data))
+            .then((response) => response.json())
+            .then((data) => setReviews(data))
             .catch((error) => console.error('Error submitting review:', error))
     }
 
+    const toggleReview = () => {
+        return setReview(!review)
+    }
+
+    const onCloseReview = () => {
+        return setReview(false)
+    }
+
+    useEffect(() => {
+        if (review) document.body.style.overflow = 'hidden'
+        else document.body.style.overflow = 'auto'
+
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') onCloseReview()
+        }
+
+        window.addEventListener('keydown', handleKeydown)
+
+        return () => {
+            document.body.style.overflow = 'auto'
+        }
+    }, [review])
+
     if (!anime) {
-        return <p>Loading...</p>
+        return <p></p>
     }
 
     return (
@@ -105,25 +102,20 @@ export default function AnimePage() {
                 <div className="top-container">
                     <div className="anime-poster">
                         <img
-                            src={'/posters/' + anime.image_url + '.jpg'}
+                            src={`/posters/${anime.image_url}.jpg`}
                             alt={anime.title}
                             className="blurred"
                         />
                         <img
-                            src={'/posters/' + anime.image_url + '.jpg'}
+                            src={`/posters/${anime.image_url}.jpg`}
                             alt={anime.title}
                             className="main"
                         />
                     </div>
                     <div className="anime-info">
-                        <img
-                            src={'/logos/' + anime.image_url + '.png'}
-                            alt={anime.title}
-                            className="anime-logo"
-                        />
-                        <p>
-                            <strong>Название:</strong> {anime.title}
-                        </p>
+                        <div className="title-wrapper">
+                            <h1>{anime.title}</h1>
+                        </div>
                         <p>
                             <strong>Год:</strong> {anime.release_year}
                         </p>
@@ -135,60 +127,99 @@ export default function AnimePage() {
                         </p>
 
                         {user && (
-                            <button
-                                className={`standard-input button favorite-button ${
-                                    isFavorite ? 'remove' : 'add'
-                                }`}
-                                onClick={toggleFavorite}
-                            >
-                                {isFavorite
-                                    ? 'Удалить из избранного'
-                                    : 'Добавить в избранное'}
-                            </button>
+                            <div className="buttons-container">
+                                <button
+                                    className={`standard-input image-button favorite-button ${isFavorite ? 'remove active' : 'add'}`}
+                                    onClick={toggleFavorite}
+                                >
+                                    <img
+                                        src={
+                                            isFavorite
+                                                ? '/media/remove-from-favorite.svg'
+                                                : '/media/add-to-favorite.svg'
+                                        }
+                                        alt=""
+                                        className="button-icon"
+                                    />
+                                    {isFavorite ? 'Удалить' : 'Добавить'}
+                                </button>
+
+                                <button
+                                    className="standard-input image-button button"
+                                    onClick={toggleReview}
+                                >
+                                    <img
+                                        src="/media/star.svg"
+                                        alt=""
+                                        className="button-icon"
+                                    />
+                                    Оставить отзыв
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
 
-                {user && (
-                    <div className="reviews-container">
-                        <h2>Оставить отзыв:</h2>
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                        <form
-                            onSubmit={handleSubmitReview}
-                            className="review-form"
+                <div
+                    className={`overlay ${review ? 'active' : ''}`}
+                    onClick={onCloseReview}
+                />
+                <div
+                    className={`filters-container container ${review ? 'active' : ''}`}
+                >
+                    <div className="filters-top-container">
+                        <h1 className="filters-title">Оставить отзыв</h1>
+                        <button
+                            className="standard-input button filters-close"
+                            onClick={onCloseReview}
                         >
-                            <div className="add-item">
-                                <label htmlFor="rating">Рейтинг (1-10):</label>
-                                <input
-                                    type="number"
-                                    id="rating"
-                                    name="rating"
-                                    min="1"
-                                    max="10"
-                                    value={newReview.rating}
-                                    onChange={handleChange}
-                                    className="standard-input"
-                                />
-                            </div>
-                            <div className="add-item">
-                                <label htmlFor="review">Отзыв:</label>
-                                <textarea
-                                    id="review"
-                                    name="review"
-                                    value={newReview.review}
-                                    onChange={handleChange}
-                                    className="standard-input textarea"
-                                ></textarea>
-                            </div>
-                            <button
-                                type="submit"
-                                className="standard-input button"
-                            >
-                                Отправить отзыв
-                            </button>
-                        </form>
+                            <img src="/media/close.svg" alt="x" />
+                        </button>
                     </div>
-                )}
+
+                    <div className="filters-content-container review-form">
+                        <div className="add-item">
+                            <label htmlFor="rating">Рейтинг:</label>
+                            <div className="rating-buttons">
+                                {Array.from(
+                                    { length: 10 },
+                                    (_, i) => i + 1
+                                ).map((value) => (
+                                    <button
+                                        key={value}
+                                        type="button"
+                                        className={`standard-input button rating-button ${newReview.rating === value ? 'active' : ''}`}
+                                        onClick={() =>
+                                            setNewReview((prev) => ({
+                                                ...prev,
+                                                rating: value,
+                                            }))
+                                        }
+                                    >
+                                        {value}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="add-item">
+                            <label htmlFor="review">Комментарий:</label>
+                            <textarea
+                                id="review"
+                                name="review"
+                                value={newReview.review}
+                                onChange={handleChange}
+                                className="standard-input textarea"
+                            ></textarea>
+                        </div>
+                        <button
+                            type="submit"
+                            className="standard-input button"
+                            onClick={handleSubmitReview}
+                        >
+                            Отправить отзыв
+                        </button>
+                    </div>
+                </div>
 
                 <div className="reviews-container">
                     <h2>Отзывы:</h2>
@@ -199,12 +230,12 @@ export default function AnimePage() {
                                     <AnimeRating rating={review.rating} />
                                     <div className="image-container">
                                         <img
-                                            src={`/avatars/${review.avatar}`}
+                                            src={review.avatar}
                                             alt="avatar"
                                             className="profile-image blurred"
                                         />
                                         <img
-                                            src={`/avatars/${review.avatar}`}
+                                            src={review.avatar}
                                             alt="avatar"
                                             className="profile-image main"
                                         />

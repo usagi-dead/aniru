@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react'
-import { AuthContext } from '../Context/AuthContext'
+import React, { useEffect, useState } from 'react'
+import { useUser } from '../Context/UserProvider.jsx'
 import '../Styles/ProfilePage/ProfilePage.css'
 import AnimeCard from '../Components/AnimeCard.jsx'
-import axios from 'axios'
 import usePageTransition from '../Hooks/usePageTransition'
 
-const ITEMS_PER_PAGE = 4
+const ITEMS_VISIBLE = 3
 
 const ProfilePage = () => {
     const { handleSwitch } = usePageTransition()
-    const { user, reviews, favorites, logout, updateUserData } =
-        useContext(AuthContext)
+    const { user, reviews, favorites, logout, updateUserData, getUserReviews } =
+        useUser()
     const [isEditing, setIsEditing] = useState(false)
     const [updatedUser, setUpdatedUser] = useState({
         username: user?.username || '',
@@ -18,8 +17,13 @@ const ProfilePage = () => {
     })
     const [avatar, setAvatar] = useState(null)
     const [avatarPreview, setAvatarPreview] = useState(null)
-    const [currentPage, setCurrentPage] = useState(0)
-    const [isAnimating, setIsAnimating] = useState(false)
+    const [currentIndex, setCurrentIndex] = useState(0)
+
+    useEffect(() => {
+        if (user) {
+            getUserReviews()
+        }
+    }, [user, getUserReviews])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -45,50 +49,25 @@ const ProfilePage = () => {
 
     const handleSave = async () => {
         try {
-            let avatarPath = user.avatar
-            if (avatar) {
-                const formData = new FormData()
-                formData.append('avatar', avatar)
-
-                const response = await axios.post(
-                    'http://localhost:5000/api/upload-avatar',
-                    formData,
-                    {
-                        headers: { 'Content-Type': 'multipart/form-data' },
-                    }
-                )
-                avatarPath = response.data.filePath
-            }
-
-            await updateUserData(user.id, {
-                ...updatedUser,
-                avatar: avatarPath,
-            })
+            await updateUserData(updatedUser, avatar)
             setIsEditing(false)
+            setAvatar(null)
+            setAvatarPreview(null)
         } catch (error) {
-            console.error('Ошибка при сохранении изменений:', error)
+            console.error('Error saving profile:', error)
         }
     }
 
     const paginate = (direction) => {
-        if (isAnimating) return
-
-        const maxPages = Math.ceil(favorites.length / ITEMS_PER_PAGE)
-        setIsAnimating(true)
-
-        setTimeout(() => {
-            setCurrentPage((prev) => {
-                const nextPage = direction === 'next' ? prev + 1 : prev - 1
-                return Math.max(0, Math.min(maxPages - 1, nextPage))
-            })
-            setIsAnimating(false)
-        }, 300) // Длительность анимации (300ms)
+        setCurrentIndex((prevIndex) => {
+            const nextIndex =
+                direction === 'next' ? prevIndex + 1 : prevIndex - 1
+            return Math.max(
+                0,
+                Math.min(favorites.length - ITEMS_VISIBLE, nextIndex)
+            )
+        })
     }
-
-    const visibleItems = favorites.slice(
-        currentPage * ITEMS_PER_PAGE,
-        (currentPage + 1) * ITEMS_PER_PAGE
-    )
 
     if (!user) return <div></div>
 
@@ -98,15 +77,14 @@ const ProfilePage = () => {
                 <div className="left-container">
                     <div className="profile-image-container">
                         <img
-                            src={avatarPreview || `/avatars/${user.avatar}`}
+                            src={avatarPreview || user.avatar}
                             alt="avatar"
                             className="profile-image blurred"
                         />
-
                         <img
-                            src={avatarPreview || `/avatars/${user.avatar}`}
+                            src={avatarPreview || user.avatar}
                             alt="avatar"
-                            className="profile-image main"
+                            className="profile-image main-image"
                         />
                     </div>
 
@@ -120,7 +98,7 @@ const ProfilePage = () => {
                                     value={updatedUser.username}
                                     onChange={handleInputChange}
                                     className="standard-input"
-                                    placeholder="Имя пользователя"
+                                    placeholder="Имя"
                                 />
                             </div>
 
@@ -173,7 +151,13 @@ const ProfilePage = () => {
                             <div className="text-container">
                                 <div className="block">
                                     <h3 className="sub-title">Описание:</h3>
-                                    <p>{user.description}</p>
+                                    {user.description !== '' ? (
+                                        <p>{user.description}</p>
+                                    ) : (
+                                        <p className="none-description">
+                                            Отсутствует
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="block">
@@ -232,50 +216,65 @@ const ProfilePage = () => {
                         <h2>
                             <span className="blue">*</span> Избранное аниме
                         </h2>
+                        {favorites.length > 0 ? (
+                            <div
+                                className={`cards-container ${favorites.length > ITEMS_VISIBLE ? '' : 'none-pagination'}`}
+                            >
+                                {favorites.length > ITEMS_VISIBLE && (
+                                    <button
+                                        disabled={currentIndex === 0}
+                                        onClick={() => paginate('prev')}
+                                        className="standard-input pagination-button"
+                                    >
+                                        <img
+                                            src="/media/arrow.svg"
+                                            alt="⬇️"
+                                            className="left"
+                                        />
+                                    </button>
+                                )}
 
-                        <div
-                            className={`cards-container ${isAnimating ? 'animating' : ''}`}
-                        >
-                            {visibleItems.map((item) => (
-                                <AnimeCard
-                                    key={`${item.id}-${currentPage}`}
-                                    anime={item}
-                                />
-                            ))}
-                        </div>
+                                <div className="cards-wrapper">
+                                    <div
+                                        className="cards-slider"
+                                        style={{
+                                            transform: `translateX(calc(-${currentIndex * (100 / ITEMS_VISIBLE)}% - ${currentIndex * 10}px))`,
+                                        }}
+                                    >
+                                        {favorites.map((item) => (
+                                            <AnimeCard
+                                                key={item.id}
+                                                anime={item}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
 
-                        {favorites.length > ITEMS_PER_PAGE && (
-                            <div className="pagination-buttons">
-                                <button
-                                    disabled={currentPage === 0}
-                                    onClick={() => paginate('prev')}
-                                    className="standard-input pagination-button"
-                                >
-                                    <img
-                                        src="/media/arrow.svg"
-                                        alt="◀"
-                                        className="left"
-                                    />
-                                </button>
-                                <button
-                                    disabled={
-                                        (currentPage + 1) * ITEMS_PER_PAGE >=
-                                        favorites.length
-                                    }
-                                    onClick={() => paginate('next')}
-                                    className="standard-input pagination-button"
-                                >
-                                    <img
-                                        src="/media/arrow.svg"
-                                        alt="▶"
-                                        className="right"
-                                    />
-                                </button>
+                                {favorites.length > ITEMS_VISIBLE && (
+                                    <button
+                                        disabled={
+                                            currentIndex ===
+                                            favorites.length - ITEMS_VISIBLE
+                                        }
+                                        onClick={() => paginate('next')}
+                                        className="standard-input pagination-button"
+                                    >
+                                        <img
+                                            src="/media/arrow.svg"
+                                            alt="⬇️"
+                                            className="right"
+                                        />
+                                    </button>
+                                )}
                             </div>
+                        ) : (
+                            <p className="none-items">
+                                У вас нет избранных аниме(
+                            </p>
                         )}
                     </section>
 
-                    <section>
+                    <section className="favorites-container">
                         <h2>
                             <span className="green">*</span> Оставленные отзывы
                         </h2>
@@ -284,7 +283,7 @@ const ProfilePage = () => {
                                 {reviews.map((review, index) => (
                                     <li key={index}>
                                         <strong>
-                                            {review.anime_title ||
+                                            {review.title ||
                                                 'Название недоступно'}
                                             :
                                         </strong>{' '}
@@ -294,7 +293,7 @@ const ProfilePage = () => {
                                 ))}
                             </ul>
                         ) : (
-                            <p>У вас нет отзывов.</p>
+                            <p className="none-items">У вас нет отзывов(</p>
                         )}
                     </section>
                 </div>

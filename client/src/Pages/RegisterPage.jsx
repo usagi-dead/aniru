@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import usePageTransition from '../Hooks/usePageTransition'
 import Message from '../Components/Message'
+import { useUser } from '../Context/UserProvider.jsx'
 import '../Styles/Auth.css'
 
 export default function RegisterPage() {
@@ -11,6 +12,7 @@ export default function RegisterPage() {
     const [success, setSuccess] = useState('')
     const [errorCheck, setErrorCheck] = useState(false)
     const [messageCheck, setMessageCheck] = useState(false)
+    const { register } = useUser() // Используем метод регистрации из контекста
     const { handleSwitch } = usePageTransition()
 
     useEffect(() => {
@@ -40,22 +42,17 @@ export default function RegisterPage() {
 
         if (!validateForm()) return
 
-        const response = await fetch('http://localhost:5000/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        })
+        const message = await register(username, password)
 
-        if (response.ok) {
-            const data = await response.json()
-            setSuccess(data.message)
+        if (message) {
+            setSuccess('Аккаунт создан!')
             setMessageCheck(true)
             setTimeout(() => {
                 handleSwitch('/login')
             }, 1200)
         } else {
-            const data = await response.json()
-            handleSetError(data.error || 'Ошибка регистрации')
+            setError('Произошла ошибка при регистрации')
+            setErrorCheck(true)
         }
     }
 

@@ -26,7 +26,7 @@ export default function AnimeList() {
         const fetchData = async () => {
             setLoading(true)
             try {
-                const response = await fetch('http://localhost:5000/api/anime')
+                const response = await fetch('http://localhost:3000/api/anime')
                 const data = await response.json()
 
                 if (Array.isArray(data)) {
@@ -68,7 +68,7 @@ export default function AnimeList() {
                     anime.release_year <= filters.yearRange[1])
 
             const matchesRating =
-                !filters.rating || anime.rating >= filters.rating
+                !filters.rating || anime.average_rating >= filters.rating
 
             return matchesGenres && matchesYear && matchesRating
         })
@@ -195,9 +195,14 @@ export default function AnimeList() {
                     </div>
                 </div>
                 <div className="anime-cards">
-                    {animeList.map((anime) => (
-                        <AnimeCard key={`${anime.id}-${key}`} anime={anime} />
-                    ))}
+                    {animeList.length > 0
+                        ? animeList.map((anime) => (
+                              <AnimeCard
+                                  key={`${anime.id}-${key}`}
+                                  anime={anime}
+                              />
+                          ))
+                        : 'Ничего не найдено'}
                 </div>
             </div>
         </>

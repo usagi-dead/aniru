@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../Context/AuthContext'
+import React, { useEffect, useState } from 'react'
+import { useUser } from '../Context/UserProvider.jsx'
 import usePageTransition from '../Hooks/usePageTransition'
 import Message from '../Components/Message'
 import '../Styles/Auth.css'
@@ -11,7 +11,7 @@ export default function LoginPage() {
     const [success, setSuccess] = useState('')
     const [errorCheck, setErrorCheck] = useState(false)
     const [messageCheck, setMessageCheck] = useState(false)
-    const { login } = useContext(AuthContext)
+    const { login } = useUser()
     const { handleSwitch } = usePageTransition()
 
     useEffect(() => {
@@ -33,24 +33,19 @@ export default function LoginPage() {
 
         if (!validateForm()) return
 
-        const response = await fetch('http://localhost:5000/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        })
+        try {
+            const data = await login(username, password)
 
-        if (response.ok) {
-            const data = await response.json()
-            setSuccess(data.message)
+            setSuccess('Успешный вход!')
             setMessageCheck(true)
+
             setTimeout(() => {
-                login(data)
                 handleSwitch('/profile')
             }, 1200)
-        } else {
-            const data = await response.json()
+        } catch (err) {
+            // Если ошибка при входе, показываем ошибку
             setErrorCheck(true)
-            setError(data.error)
+            setError(err.response ? err.response.data.error : 'Ошибка входа')
         }
     }
 
