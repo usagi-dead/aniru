@@ -1,0 +1,241 @@
+.anime-container {
+    margin: 0 auto 32px auto;
+    background-color: rgba(238, 238, 238, 0.15);
+    border-radius: 64px;
+
+    .margin-container {
+        width: calc(100% - 64px);
+        padding: 32px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        .anime-rating {
+            scale: 1.5;
+            top: 48px;
+            right: 62px;
+        }
+
+        .top-container {
+            display: flex;
+            gap: 32px;
+            max-height: 400px;
+
+            .anime-poster {
+                width: 280px;
+                min-width: 280px;
+                height: 400px;
+                position: relative;
+
+                .blurred,
+                .main {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                    border-radius: 32px;
+                }
+
+                .blurred {
+                    filter: blur(28px);
+                    position: absolute;
+                    opacity: 0.6;
+                }
+
+                .main {
+                    position: relative;
+                }
+
+                .anime-poster,
+                .anime-blurred {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    z-index: -1;
+                }
+            }
+
+            .anime-info {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                max-width: calc(100% - 310px);
+                height: 400px;
+
+                strong {
+                    font-weight: 800;
+                }
+
+                .title-wrapper {
+                    display: flex;
+                    justify-content: space-between;
+                    width: calc(100% - 160px);
+                }
+
+                h1 {
+                    font-size: 96px;
+                    font-weight: 900;
+                    margin: 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 24px;
+                    font-weight: 500;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;
+                }
+
+                .anime-logo {
+                    max-height: 180px;
+                    width: min-content;
+                    object-fit: contain;
+                }
+
+                .favorite-button {
+                    width: 180px;
+                }
+            }
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 40px;
+            font-weight: 800;
+        }
+
+        .reviews-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .review-container {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .top {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                .date {
+                    color: rgba(255, 255, 255, 0.3);
+                }
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                margin: 0;
+            }
+
+            li {
+                display: flex;
+                gap: 16px;
+                background-color: rgba(30, 30, 30, 0.6);
+                padding: 16px;
+                border-radius: 32px;
+                position: relative;
+
+                .anime-rating {
+                    scale: 1;
+                    top: 16px;
+                    right: 16px;
+                }
+            }
+
+            p, h3 {
+                margin: 0;
+            }
+
+            p {
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 4;
+            }
+
+            h3 {
+                font-size: 32px;
+            }
+
+            .image-container {
+                position: relative;
+                min-width: 128px;
+                height: 128px;
+
+                .profile-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 16px;
+
+                    &.blurred {
+                        position: absolute;
+                        filter: blur(10px);
+                    }
+
+                    &.main {
+                        position: relative;
+                    }
+                }
+            }
+        }
+
+        .filters-container {
+            width: 1400px;
+        }
+
+        .review-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+
+            .add-item {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+
+                label {
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+
+                textarea {
+                    height: 280px;
+                    padding: 16px 24px;
+                    text-align: left;
+                }
+            }
+
+            .rating-buttons {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                gap: 16px;
+
+                .rating-button {
+                    flex: 1;
+                    padding: 0;
+                }
+            }
+
+            .button {
+                width: fit-content;
+            }
+        }
+    }
+}

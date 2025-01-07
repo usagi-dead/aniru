@@ -1,0 +1,205 @@
+.anime-container {
+  margin: 0 auto 32px auto;
+  background-color: rgba(238, 238, 238, 0.15);
+  border-radius: 64px;
+}
+.anime-container .margin-container {
+  width: calc(100% - 64px);
+  padding: 32px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.anime-container .margin-container .anime-rating {
+  scale: 1.5;
+  top: 48px;
+  right: 62px;
+}
+.anime-container .margin-container .top-container {
+  display: flex;
+  gap: 32px;
+  max-height: 400px;
+}
+.anime-container .margin-container .top-container .anime-poster {
+  width: 280px;
+  min-width: 280px;
+  height: 400px;
+  position: relative;
+}
+.anime-container .margin-container .top-container .anime-poster .blurred,
+.anime-container .margin-container .top-container .anime-poster .main {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 32px;
+}
+.anime-container .margin-container .top-container .anime-poster .blurred {
+  filter: blur(28px);
+  position: absolute;
+  opacity: 0.6;
+}
+.anime-container .margin-container .top-container .anime-poster .main {
+  position: relative;
+}
+.anime-container .margin-container .top-container .anime-poster .anime-poster,
+.anime-container .margin-container .top-container .anime-poster .anime-blurred {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+.anime-container .margin-container .top-container .anime-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: calc(100% - 310px);
+  height: 400px;
+}
+.anime-container .margin-container .top-container .anime-info strong {
+  font-weight: 800;
+}
+.anime-container .margin-container .top-container .anime-info .title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 160px);
+}
+.anime-container .margin-container .top-container .anime-info h1 {
+  font-size: 96px;
+  font-weight: 900;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.anime-container .margin-container .top-container .anime-info p {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.anime-container .margin-container .top-container .anime-info .anime-logo {
+  max-height: 180px;
+  width: min-content;
+  object-fit: contain;
+}
+.anime-container .margin-container .top-container .anime-info .favorite-button {
+  width: 180px;
+}
+.anime-container .margin-container h2 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 800;
+}
+.anime-container .margin-container .reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.anime-container .margin-container .reviews-container .review-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.anime-container .margin-container .reviews-container .top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.anime-container .margin-container .reviews-container .top .date {
+  color: rgba(255, 255, 255, 0.3);
+}
+.anime-container .margin-container .reviews-container ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin: 0;
+}
+.anime-container .margin-container .reviews-container li {
+  display: flex;
+  gap: 16px;
+  background-color: rgba(30, 30, 30, 0.6);
+  padding: 16px;
+  border-radius: 32px;
+  position: relative;
+}
+.anime-container .margin-container .reviews-container li .anime-rating {
+  scale: 1;
+  top: 16px;
+  right: 16px;
+}
+.anime-container .margin-container .reviews-container p, .anime-container .margin-container .reviews-container h3 {
+  margin: 0;
+}
+.anime-container .margin-container .reviews-container p {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+.anime-container .margin-container .reviews-container h3 {
+  font-size: 32px;
+}
+.anime-container .margin-container .reviews-container .image-container {
+  position: relative;
+  min-width: 128px;
+  height: 128px;
+}
+.anime-container .margin-container .reviews-container .image-container .profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+.anime-container .margin-container .reviews-container .image-container .profile-image.blurred {
+  position: absolute;
+  filter: blur(10px);
+}
+.anime-container .margin-container .reviews-container .image-container .profile-image.main {
+  position: relative;
+}
+.anime-container .margin-container .filters-container {
+  width: 1400px;
+}
+.anime-container .margin-container .review-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.anime-container .margin-container .review-form .add-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.anime-container .margin-container .review-form .add-item label {
+  font-size: 24px;
+  font-weight: 700;
+}
+.anime-container .margin-container .review-form .add-item textarea {
+  height: 280px;
+  padding: 16px 24px;
+  text-align: left;
+}
+.anime-container .margin-container .review-form .rating-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.anime-container .margin-container .review-form .rating-buttons .rating-button {
+  flex: 1;
+  padding: 0;
+}
+.anime-container .margin-container .review-form .button {
+  width: fit-content;
+}
+
+/*# sourceMappingURL=AnimePage.css.map */
