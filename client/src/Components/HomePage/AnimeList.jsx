@@ -3,6 +3,7 @@ import '../../Styles/HomePage/AnimeList.css'
 import AnimeCard from '../AnimeCard.jsx'
 import Filters from './Filters.jsx'
 import SortMenu from './SortMenu.jsx'
+import API_BASE_URL from '../../config'
 
 export default function AnimeList() {
     const filters = null
@@ -26,7 +27,7 @@ export default function AnimeList() {
         const fetchData = async () => {
             setLoading(true)
             try {
-                const response = await fetch('http://localhost:3000/api/anime')
+                const response = await fetch(`${API_BASE_URL}/api/anime`)
                 const data = await response.json()
 
                 if (Array.isArray(data)) {

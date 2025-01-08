@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../config'
 
 const UserContext = createContext()
 
@@ -14,7 +15,7 @@ export const UserProvider = ({ children }) => {
     const getUserReviews = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:3000/api/users/reviews',
+                `${API_BASE_URL}/api/users/reviews`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -42,7 +43,7 @@ export const UserProvider = ({ children }) => {
             }
 
             const response = await axios.put(
-                'http://localhost:3000/api/users/profile',
+                `${API_BASE_URL}/api/users/profile`,
                 formData,
                 {
                     headers: {
@@ -72,7 +73,7 @@ export const UserProvider = ({ children }) => {
         try {
             setLoading(true)
             const response = await axios.get(
-                'http://localhost:3000/api/users/profile',
+                `${API_BASE_URL}/api/users/profile`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -96,7 +97,7 @@ export const UserProvider = ({ children }) => {
         try {
             setLoading(true)
             const response = await axios.get(
-                'http://localhost:3000/api/users/favorites',
+                `${API_BASE_URL}/api/users/favorites`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -119,7 +120,7 @@ export const UserProvider = ({ children }) => {
     const addToFavorites = async (animeId) => {
         try {
             await axios.post(
-                'http://localhost:3000/api/users/favorites',
+                `${API_BASE_URL}/api/users/favorites`,
                 { animeId },
                 {
                     headers: {
@@ -127,7 +128,7 @@ export const UserProvider = ({ children }) => {
                     },
                 }
             )
-            getUserFavorites() // обновляем список избранных
+            getUserFavorites() // Обновляем список избранных
         } catch (err) {
             setError(
                 err.response
@@ -140,7 +141,7 @@ export const UserProvider = ({ children }) => {
     // Удаление аниме из избранного
     const removeFromFavorites = async (animeId) => {
         try {
-            await axios.delete('http://localhost:3000/api/users/favorites', {
+            await axios.delete(`${API_BASE_URL}/api/users/favorites`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -163,7 +164,7 @@ export const UserProvider = ({ children }) => {
     const register = async (username, password) => {
         try {
             const response = await axios.post(
-                'http://localhost:3000/api/auth/register',
+                `${API_BASE_URL}/api/auth/register`,
                 {
                     username,
                     password,
@@ -185,7 +186,7 @@ export const UserProvider = ({ children }) => {
     const login = async (username, password) => {
         try {
             const response = await axios.post(
-                'http://localhost:3000/api/auth/login',
+                `${API_BASE_URL}/api/auth/login`,
                 {
                     username,
                     password,

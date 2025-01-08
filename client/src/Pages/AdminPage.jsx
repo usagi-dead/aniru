@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import '../Styles/AdminPage/AdminPage.css'
+import API_BASE_URL from '../config'
 
 const AdminPage = () => {
     const [animeList, setAnimeList] = useState([])
@@ -51,31 +52,31 @@ const AdminPage = () => {
                 const token = localStorage.getItem('token')
 
                 const animeResponse = await axios.get(
-                    'http://localhost:3000/api/admin/anime',
+                    `${API_BASE_URL}/api/admin/anime`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 setAnimeList(animeResponse.data)
 
                 const reviewsResponse = await axios.get(
-                    'http://localhost:3000/api/admin/reviews',
+                    `${API_BASE_URL}/api/admin/reviews`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 setReviews(reviewsResponse.data)
 
                 const usersResponse = await axios.get(
-                    'http://localhost:3000/api/admin/users',
+                    `${API_BASE_URL}/api/admin/users`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 setUsers(usersResponse.data)
 
                 const genresResponse = await axios.get(
-                    'http://localhost:3000/api/admin/genres',
+                    `${API_BASE_URL}/api/admin/genres`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 setGenres(genresResponse.data)
 
                 const animeGenresResponse = await axios.get(
-                    'http://localhost:3000/api/admin/anime-genres',
+                    `${API_BASE_URL}/api/admin/anime-genres`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 setAnimeGenres(animeGenresResponse.data)
@@ -95,7 +96,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             const response = await axios.post(
-                'http://localhost:3000/api/admin/anime',
+                `${API_BASE_URL}/api/admin/anime`,
                 newAnime,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -115,7 +116,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             await axios.put(
-                `http://localhost:3000/api/admin/anime/${editAnime.id}`,
+                `${API_BASE_URL}/api/admin/anime/${editAnime.id}`,
                 editAnime,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -133,7 +134,7 @@ const AdminPage = () => {
     const handleDeleteAnime = async (id) => {
         try {
             const token = localStorage.getItem('token')
-            await axios.delete(`http://localhost:3000/api/admin/anime/${id}`, {
+            await axios.delete(`${API_BASE_URL}/api/admin/anime/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             setAnimeList(animeList.filter((anime) => anime.id !== id))
@@ -147,7 +148,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             const response = await axios.post(
-                'http://localhost:3000/api/admin/genres',
+                `${API_BASE_URL}/api/admin/genres`,
                 newGenre,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -162,7 +163,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             await axios.put(
-                `http://localhost:3000/api/admin/genres/${editGenre.id}`,
+                `${API_BASE_URL}/api/admin/genres/${editGenre.id}`,
                 editGenre,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -180,7 +181,7 @@ const AdminPage = () => {
     const handleDeleteGenre = async (id) => {
         try {
             const token = localStorage.getItem('token')
-            await axios.delete(`http://localhost:3000/api/admin/genres/${id}`, {
+            await axios.delete(`${API_BASE_URL}/api/admin/genres/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             setGenres(genres.filter((genre) => genre.id !== id))
@@ -194,7 +195,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             const response = await axios.post(
-                'http://localhost:3000/api/admin/reviews',
+                `${API_BASE_URL}/api/admin/reviews`,
                 newReview,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -214,7 +215,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             await axios.put(
-                `http://localhost:3000/api/admin/reviews/${editReview.id}`,
+                `${API_BASE_URL}/api/admin/reviews/${editReview.id}`,
                 editReview,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -232,12 +233,9 @@ const AdminPage = () => {
     const handleDeleteReview = async (id) => {
         try {
             const token = localStorage.getItem('token')
-            await axios.delete(
-                `http://localhost:3000/api/admin/reviews/${id}`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            )
+            await axios.delete(`${API_BASE_URL}/api/admin/reviews/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             setReviews(reviews.filter((review) => review.id !== id))
         } catch (error) {
             console.error('Error deleting review:', error)
@@ -249,7 +247,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             const response = await axios.post(
-                'http://localhost:3000/api/admin/users',
+                `${API_BASE_URL}/api/admin/users`,
                 newUser,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -264,7 +262,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             await axios.put(
-                `http://localhost:3000/api/admin/users/${editUser.id}`,
+                `${API_BASE_URL}/api/admin/users/${editUser.id}`,
                 editUser,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -280,7 +278,7 @@ const AdminPage = () => {
     const handleDeleteUser = async (id) => {
         try {
             const token = localStorage.getItem('token')
-            await axios.delete(`http://localhost:3000/api/admin/users/${id}`, {
+            await axios.delete(`${API_BASE_URL}/api/admin/users/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             setUsers(users.filter((user) => user.id !== id))
@@ -294,7 +292,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             await axios.post(
-                'http://localhost:3000/api/admin/anime-genres',
+                `${API_BASE_URL}/api/admin/anime-genres`,
                 newAnimeGenre,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -309,7 +307,7 @@ const AdminPage = () => {
         try {
             const token = localStorage.getItem('token')
             await axios.delete(
-                `http://localhost:3000/api/admin/anime-genres/${animeId}/${genreId}`,
+                `${API_BASE_URL}/api/admin/anime-genres/${animeId}/${genreId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             alert('Связь удалена')
@@ -903,7 +901,7 @@ const AdminPage = () => {
                     </section>
                 )}
 
-                {/* Управление связями между аниме и жанрами */}
+                {/* Управление связями между аниме и жанров */}
                 {activeTab === 'anime-genres' && (
                     <section>
                         <h2>Управление связями аниме и жанров</h2>

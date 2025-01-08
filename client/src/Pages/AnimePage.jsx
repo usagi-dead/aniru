@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useUser } from '../Context/UserProvider'
 import '../Styles/AnimePage/AnimePage.css'
 import AnimeRating from '../Components/AnimeRating.jsx'
+import API_BASE_URL from '../config'
 
 export default function AnimePage() {
     const { id } = useParams()
@@ -16,12 +17,12 @@ export default function AnimePage() {
     const isFavorite = favorites.some((fav) => fav.id === parseInt(id, 10))
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/anime/${id}`)
+        fetch(`${API_BASE_URL}/api/anime/${id}`)
             .then((response) => response.json())
             .then((data) => setAnime(data))
             .catch((error) => console.error('Error fetching anime:', error))
 
-        fetch(`http://localhost:3000/api/anime/${id}/reviews`)
+        fetch(`${API_BASE_URL}/api/anime/${id}/reviews`)
             .then((response) => response.json())
             .then((data) => setReviews(data))
             .catch((error) => console.error('Error fetching reviews:', error))
@@ -48,7 +49,7 @@ export default function AnimePage() {
             return
         }
 
-        fetch(`http://localhost:3000/api/anime/${id}/reviews`, {
+        fetch(`${API_BASE_URL}/api/anime/${id}/reviews`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ export default function AnimePage() {
         })
             .then(() => {
                 setNewReview({ rating: '', review: '' })
-                return fetch(`http://localhost:3000/api/anime/${id}/reviews`)
+                return fetch(`${API_BASE_URL}/api/anime/${id}/reviews`)
             })
             .then((response) => response.json())
             .then((data) => setReviews(data))

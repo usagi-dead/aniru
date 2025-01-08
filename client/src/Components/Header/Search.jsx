@@ -3,6 +3,7 @@ import '../../Styles/Search.css'
 import AnimeRating from '../AnimeRating.jsx'
 import axios from 'axios'
 import usePageTransition from '../../Hooks/usePageTransition.jsx'
+import API_BASE_URL from '../../config'
 
 const Search = () => {
     const [isActive, setIsActive] = useState(false)
@@ -53,7 +54,7 @@ const Search = () => {
 
         const timeoutId = setTimeout(() => {
             axios
-                .get(`http://localhost:3000/api/anime/search`, {
+                .get(`${API_BASE_URL}/api/anime/search`, {
                     params: { title: query },
                 })
                 .then((response) => {

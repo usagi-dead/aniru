@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../Styles/HomePage/MainPoster.css'
+import API_BASE_URL from '../../config'
 
 export default function MainPoster() {
     const [loading, setLoading] = useState(true)
@@ -10,9 +11,7 @@ export default function MainPoster() {
         const fetchMainAnime = async () => {
             setLoading(true)
             try {
-                const response = await fetch(
-                    'http://localhost:3000/api/anime/11'
-                )
+                const response = await fetch(`${API_BASE_URL}/api/anime/11`)
                 const data = await response.json()
                 setMainAnime(data)
             } catch (error) {

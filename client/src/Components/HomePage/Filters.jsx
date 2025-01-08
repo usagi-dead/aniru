@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../Styles/HomePage/Filters.css'
+import API_BASE_URL from '../../config'
 
 export default function Filters({
     onClose,
@@ -24,9 +25,7 @@ export default function Filters({
     useEffect(() => {
         const fetchFilters = async () => {
             try {
-                const response = await fetch(
-                    'http://localhost:3000/api/anime/genres'
-                )
+                const response = await fetch(`${API_BASE_URL}/api/anime/genres`)
                 const data = await response.json()
                 data.sort()
                 setGenres(data)
