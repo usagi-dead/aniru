@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Настройка CORS
 app.use(
     cors({
-        origin: 'http://localhost:5173', // URL фронтенда
+        origin: 'https://aniru-catalog.netlify.app/', // URL фронтенда
         credentials: true,
     })
 )
