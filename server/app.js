@@ -16,10 +16,21 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+const allowedOrigins = [
+    'http://localhost:5173', // Для локальной разработки
+    'https://aniru-catalog.netlify.app', // Для продакшн-версии
+]
+
 // Настройка CORS
 app.use(
     cors({
-        origin: 'https://aniru-catalog.netlify.app/', // URL фронтенда
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true)
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        },
         credentials: true,
     })
 )
