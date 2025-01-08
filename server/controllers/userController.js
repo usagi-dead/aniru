@@ -104,9 +104,9 @@ const updateUserProfile = (req, res) => {
         const { username, description } = req.body
         let avatar = null
 
-        // Если файл загружен, формируем URL для аватарки
+        // Если файл загружен, сохраняем только имя файла
         if (req.file) {
-            avatar = `${req.protocol}://${req.get('host')}/uploads/avatars/${req.file.filename}`
+            avatar = req.file.filename
         }
 
         const query = `
@@ -123,7 +123,7 @@ const updateUserProfile = (req, res) => {
 
             res.status(200).json({
                 message: 'Profile updated successfully',
-                avatarUrl: avatar,
+                avatarUrl: avatar, // Возвращаем только имя файла
             })
         })
     } catch (err) {
