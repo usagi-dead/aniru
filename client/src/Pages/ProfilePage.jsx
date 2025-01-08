@@ -3,7 +3,7 @@ import { useUser } from '../Context/UserProvider.jsx'
 import '../Styles/ProfilePage/ProfilePage.css'
 import AnimeCard from '../Components/AnimeCard.jsx'
 import usePageTransition from '../Hooks/usePageTransition'
-import config from '../config'
+import API_BASE_URL from '../config'
 
 const ITEMS_VISIBLE = 3
 
@@ -80,7 +80,7 @@ const ProfilePage = () => {
                         <img
                             src={
                                 avatarPreview ||
-                                `${config.API_BASE_URL}/uploads/avatars/${user.avatar}`
+                                `${API_BASE_URL}/uploads/avatars/${user.avatar}`
                             }
                             alt="avatar"
                             className="profile-image blurred"
@@ -88,7 +88,7 @@ const ProfilePage = () => {
                         <img
                             src={
                                 avatarPreview ||
-                                `${config.API_BASE_URL}/uploads/avatars/${user.avatar}`
+                                `${API_BASE_URL}/uploads/avatars/${user.avatar}`
                             }
                             alt="avatar"
                             className="profile-image main-image"
