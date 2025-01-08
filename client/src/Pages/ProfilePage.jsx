@@ -18,6 +18,7 @@ const ProfilePage = () => {
     const [avatar, setAvatar] = useState(null)
     const [avatarPreview, setAvatarPreview] = useState(null)
     const [currentIndex, setCurrentIndex] = useState(0)
+    const [isImageLoaded, setIsImageLoaded] = useState(false)
 
     useEffect(() => {
         if (user) {
@@ -36,6 +37,10 @@ const ProfilePage = () => {
             setAvatar(file)
             setAvatarPreview(URL.createObjectURL(file))
         }
+    }
+
+    const handleImageLoad = () => {
+        setIsImageLoaded(true)
     }
 
     const startEditing = () => {
@@ -69,7 +74,7 @@ const ProfilePage = () => {
         })
     }
 
-    if (!user) return <div></div>
+    if (!user || !isImageLoaded) return <div></div>
 
     return (
         <div className="profile-container container">
@@ -80,11 +85,13 @@ const ProfilePage = () => {
                             src={avatarPreview || user.avatar}
                             alt="avatar"
                             className="profile-image blurred"
+                            onLoad={handleImageLoad}
                         />
                         <img
                             src={avatarPreview || user.avatar}
                             alt="avatar"
                             className="profile-image main-image"
+                            onLoad={handleImageLoad}
                         />
                     </div>
 
