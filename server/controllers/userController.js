@@ -121,9 +121,14 @@ const updateUserProfile = (req, res) => {
                 return res.status(500).json({ error: 'Database error' })
             }
 
+            // Возвращаем полный URL к аватарке
+            const avatarUrl = avatar
+                ? `${req.protocol}://${req.get('host')}/uploads/avatars/${avatar}`
+                : null
+
             res.status(200).json({
                 message: 'Profile updated successfully',
-                avatarUrl: avatar, // Возвращаем только имя файла
+                avatarUrl, // Возвращаем полный URL
             })
         })
     } catch (err) {

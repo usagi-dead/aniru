@@ -1,11 +1,17 @@
 const multer = require('multer')
 const path = require('path')
+const fs = require('fs')
+
+// Создаем папку для загрузки аватарок, если она не существует
+const uploadPath = path.join(__dirname, '../uploads/avatars')
+if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true })
+}
 
 // Настройка Multer для загрузки аватарок
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, '../uploads/avatars') // Путь для сохранения
-        cb(null, uploadPath)
+        cb(null, uploadPath) // Путь для сохранения
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase()

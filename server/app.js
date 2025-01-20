@@ -43,8 +43,15 @@ app.use(
                 defaultSrc: ["'self'"],
                 scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
                 styleSrc: ["'self'", "'unsafe-inline'"],
-                imgSrc: ["'self'", 'data:'],
-                connectSrc: ["'self'"],
+                imgSrc: [
+                    "'self'",
+                    'data:',
+                    'https://anime-catalog-7kii.onrender.com',
+                ], // Разрешаем загрузку изображений с вашего сервера
+                connectSrc: [
+                    "'self'",
+                    'https://anime-catalog-7kii.onrender.com',
+                ], // Разрешаем запросы к вашему серверу
             },
         },
     })
@@ -52,7 +59,7 @@ app.use(
 
 // Заголовок Cross-Origin-Resource-Policy
 app.use((req, res, next) => {
-    res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin') // Разрешаем доступ с других доменов
     next()
 })
 
@@ -66,7 +73,11 @@ app.use(
 // Обслуживание аватарок
 app.use(
     '/uploads/avatars',
-    express.static(path.join(__dirname, 'uploads/avatars'))
+    express.static(path.join(__dirname, 'uploads/avatars'), {
+        setHeaders: (res) => {
+            res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin') // Разрешаем доступ к аватаркам с других доменов
+        },
+    })
 )
 
 // Маршруты
@@ -85,7 +96,7 @@ app.use((req, res) => {
 })
 
 // Обработка ошибок
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).json({ error: 'Internal server error' })
 })

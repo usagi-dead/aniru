@@ -231,12 +231,12 @@ export default function AnimePage() {
                                     <AnimeRating rating={review.rating} />
                                     <div className="image-container">
                                         <img
-                                            src={review.avatar}
+                                            src={`${API_BASE_URL}/uploads/avatars/${review.avatar}`}
                                             alt="avatar"
                                             className="profile-image blurred"
                                         />
                                         <img
-                                            src={review.avatar}
+                                            src={`${API_BASE_URL}/uploads/avatars/${review.avatar}`}
                                             alt="avatar"
                                             className="profile-image main"
                                         />

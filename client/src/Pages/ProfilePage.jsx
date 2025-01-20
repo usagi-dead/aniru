@@ -80,7 +80,9 @@ const ProfilePage = () => {
                         <img
                             src={
                                 avatarPreview ||
-                                `${API_BASE_URL}/uploads/avatars/${user.avatar}`
+                                (user.avatar
+                                    ? `${API_BASE_URL}/uploads/avatars/${user.avatar}`
+                                    : '/default-avatar.png')
                             }
                             alt="avatar"
                             className="profile-image blurred"
@@ -88,7 +90,9 @@ const ProfilePage = () => {
                         <img
                             src={
                                 avatarPreview ||
-                                `${API_BASE_URL}/uploads/avatars/${user.avatar}`
+                                (user.avatar
+                                    ? `${API_BASE_URL}/uploads/avatars/${user.avatar}`
+                                    : '/default-avatar.png')
                             }
                             alt="avatar"
                             className="profile-image main-image"

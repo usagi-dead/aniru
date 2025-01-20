@@ -1,14 +1,13 @@
 const db = require('../utils/db')
 
 module.exports = async (req, res, next) => {
-    const userId = req.user?.id // Получаем ID пользователя из токена
+    const userId = req.user?.id
 
     if (!userId) {
         return res.status(401).json({ error: 'Unauthorized' })
     }
 
     try {
-        // Запрос к базе данных для получения роли пользователя
         const query = 'SELECT role FROM Users WHERE id = ?'
         db.get(query, [userId], (err, user) => {
             if (err || !user) {
@@ -21,7 +20,7 @@ module.exports = async (req, res, next) => {
                     .json({ error: 'Forbidden: Access denied' })
             }
 
-            next() // Продолжаем, если пользователь администратор
+            next()
         })
     } catch (error) {
         console.error('Error checking user role:', error)
