@@ -53,7 +53,6 @@ const ProfilePage = () => {
             await updateUserData(updatedUser, avatar)
             setIsEditing(false)
             setAvatar(null)
-            setAvatarPreview(null)
         } catch (error) {
             console.error('Error saving profile:', error)
         }
