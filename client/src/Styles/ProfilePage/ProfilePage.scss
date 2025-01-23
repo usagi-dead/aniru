@@ -26,11 +26,11 @@
             position: relative;
             min-width: 230px;
             min-height: 230px;
+            max-height: 230px;
 
             .profile-image {
                 width: 100%;
                 height: 100%;
-                max-height: 230px;
                 object-fit: cover;
                 border-radius: 32px;
                 text-align: center;
