@@ -82,7 +82,7 @@ const ProfilePage = () => {
                                 avatarPreview ||
                                 (user.avatar
                                     ? `${API_BASE_URL}/uploads/avatars/${user.avatar}`
-                                    : '/default-avatar.png')
+                                    : `${API_BASE_URL}/uploads/avatars/default-avatar.png`)
                             }
                             alt="avatar"
                             className="profile-image blurred"
@@ -92,7 +92,7 @@ const ProfilePage = () => {
                                 avatarPreview ||
                                 (user.avatar
                                     ? `${API_BASE_URL}/uploads/avatars/${user.avatar}`
-                                    : '/default-avatar.png')
+                                    : `${API_BASE_URL}/uploads/avatars/default-avatar.png`)
                             }
                             alt="avatar"
                             className="profile-image main-image"
