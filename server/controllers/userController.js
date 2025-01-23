@@ -94,7 +94,8 @@ const getUserReviews = (req, res) => {
 }
 
 // Обновление профиля пользователя
-const updateUserProfile = (req, res) => {
+
+const updateUserProfile = async (req, res) => {
     try {
         const userId = req.user?.id
         if (!userId) {
@@ -104,9 +105,8 @@ const updateUserProfile = (req, res) => {
         const { username, description } = req.body
         let avatar = null
 
-        // Если файл загружен, сохраняем только имя файла
         if (req.file) {
-            avatar = req.file.filename
+            avatar = req.file.filename // Имя файла
         }
 
         const query = `
@@ -121,7 +121,6 @@ const updateUserProfile = (req, res) => {
                 return res.status(500).json({ error: 'Database error' })
             }
 
-            // Возвращаем полный URL к аватарке
             const avatarUrl = avatar
                 ? `${req.protocol}://${req.get('host')}/uploads/avatars/${avatar}`
                 : null

@@ -2,20 +2,18 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
-// Создаем папку для загрузки аватарок, если она не существует
 const uploadPath = path.join(__dirname, '../uploads/avatars')
 if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true })
 }
 
-// Настройка Multer для загрузки аватарок
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadPath) // Путь для сохранения
+        cb(null, uploadPath)
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase()
-        const filename = `${Date.now()}${ext}` // Уникальное имя файла
+        const filename = `${Date.now()}${ext}`
         cb(null, filename)
     },
 })
@@ -35,6 +33,5 @@ const upload = multer({
     },
 })
 
-// Экспортируем middleware
 const avatarUpload = upload.single('avatar')
 module.exports = avatarUpload
