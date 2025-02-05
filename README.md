@@ -4,6 +4,8 @@
 
 It's not a commercial project.
 
+[Preview](https://aniru-catalog.netlify.app/) (wait ~30 sec to enable server)
+
 View layout in [Figma](https://www.figma.com/design/uphs47zeE4f9aRiy2vWNT2/Offliner?node-id=0-1&t=EPzOXTi8MTe644zu-1) (not the final version, the layout was finalized during the development process)
 
 ##
