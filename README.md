@@ -6,7 +6,7 @@ It's not a commercial project.
 
 [Preview](https://aniru-catalog.netlify.app/) (wait ~30 sec to enable server)
 
-View layout in [Figma](https://www.figma.com/design/lTPrui95EflyKgOVOAYDVc/aniru?node-id=0-1&t=YzG5JdRsjJg11NfP-1) (not the final version, the layout was finalized during the development process)
+View layout at [Figma](https://www.figma.com/design/lTPrui95EflyKgOVOAYDVc/aniru?node-id=0-1&t=YzG5JdRsjJg11NfP-1) (not the final version, the layout was finalized during the development process)
 
 ##
 
