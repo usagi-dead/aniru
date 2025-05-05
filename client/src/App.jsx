@@ -13,7 +13,7 @@ import RegisterPage from './Pages/RegisterPage.jsx'
 import LoginPage from './Pages/LoginPage.jsx'
 import ProfilePage from './Pages/ProfilePage.jsx'
 import AnimePage from './Pages/AnimePage'
-import AdminPage from './Pages/AdminPage' // Добавляем импорт админ-панели
+import AdminPage from './Pages/AdminPage'
 import { UserProvider } from './Context/UserProvider'
 
 function App() {
